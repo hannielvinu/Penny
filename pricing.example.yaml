@@ -1,0 +1,11 @@
+models:
+  openai/gpt-4o-mini:
+    input_per_1m_usd: null
+    output_per_1m_usd: null
+    source_url: ""
+    checked_on: ""
+  anthropic/claude-sonnet-latest:
+    input_per_1m_usd: null
+    output_per_1m_usd: null
+    source_url: ""
+    checked_on: ""

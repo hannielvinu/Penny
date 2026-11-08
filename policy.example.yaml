@@ -1,0 +1,25 @@
+version: 1
+confidential: false
+confidential_globs: ["secrets/**", "**/*.pem", ".env*", "config/prod/**"]
+on_confidential: go_local
+de_escalate: true
+test_command: null
+auto_approve:
+  reads: true
+  commands: ["pytest -q", "python -m pytest -q"]
+limits:
+  budget_usd: 0.50
+  max_steps: 25
+  max_prompt_tokens: 12000
+  max_output_tokens: 800
+  max_wall_seconds: 900
+  token_cap: 150000
+models:
+  cheap: openai/gpt-4o-mini
+  strong: anthropic/claude-sonnet-latest
+  local: ollama/qwen2.5-coder:7b
+  local_strong: null
+  fallbacks: []
+git:
+  branch_prefix: penny/
+  allow_push: false
