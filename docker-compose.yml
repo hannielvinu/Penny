@@ -5,6 +5,7 @@ services:
     environment:
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
       BIFROST_SETUP_TOKEN: ${BIFROST_SETUP_TOKEN:?Run python scripts/bootstrap_bifrost.py --prepare first}
       APP_HOST: 0.0.0.0
     volumes:

@@ -31,6 +31,7 @@ class RunRecord(StrictModel):
     withheld_files: list[str] = Field(default_factory=list)
     files_changed: list[str] = Field(default_factory=list)
     created_files: list[str] = Field(default_factory=list)
+    created_file_hashes: dict[str, str] = Field(default_factory=dict)
     tests: list[dict] = Field(default_factory=list)
     totals: dict = Field(default_factory=dict)
     undo_command: str = ""

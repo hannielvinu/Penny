@@ -5,7 +5,7 @@ import pytest
 from penny.agent.guard import Chunk, RouteGuard, prepare, sanitize
 from penny.repo.secrets import mask, secret_path
 from penny.safety.approvals import Approval, DenyAllApprover, SandboxAutoApprover, ScriptedApprover
-from penny.safety.paths import PathViolation, safe_path
+from penny.safety.paths import PathViolation, safe_path, state_path
 from penny.safety.risk import Risk, classify, normalized
 
 BLOCKED = [
@@ -142,6 +142,19 @@ def test_symlink_escape(tmp_path):
         pytest.skip("Symlink privilege unavailable on this host; CI tests on Linux/macOS")
     with pytest.raises(PathViolation):
         safe_path(tmp_path, "link/file")
+    (tmp_path / ".penny").mkdir()
+    (tmp_path / ".penny/cache").symlink_to(outside, target_is_directory=True)
+    with pytest.raises(PathViolation):
+        state_path(tmp_path, "cache/map.json")
+
+
+def test_state_paths(tmp_path):
+    assert (
+        state_path(tmp_path, "runs/run/receipt.html") == tmp_path / ".penny/runs/run/receipt.html"
+    )
+    for value in ("../outside", "/outside", "C:/Windows", "a\\b"):
+        with pytest.raises(PathViolation):
+            state_path(tmp_path, value)
 
 
 @pytest.mark.parametrize(

@@ -7,7 +7,7 @@ from penny.cost.estimate import tokens
 from penny.repo import symbols_generic, symbols_py
 from penny.repo.bm25 import rank
 from penny.repo.ignore import Ignore
-from penny.safety.paths import safe_path
+from penny.safety.paths import safe_path, state_path
 
 
 class RepoMap:
@@ -17,7 +17,7 @@ class RepoMap:
         self.files: list[dict] = []
 
     def build(self):
-        cache_path = self.root / ".penny/cache/repomap.json"
+        cache_path = state_path(self.root, "cache/repomap.json")
         try:
             cached = {f["path"]: f for f in json.loads(cache_path.read_text(encoding="utf-8"))}
         except (OSError, ValueError, TypeError):
@@ -73,7 +73,7 @@ class RepoMap:
         documents = [
             f["path"] + " " + " ".join(s["signature"] for s in f["symbols"]) for f in self.files
         ]
-        selected = []
+        selected: list[str] = []
         for i, _ in rank(query, documents):
             line = documents[i]
             if tokens("\n".join(selected + [line])) <= cap:

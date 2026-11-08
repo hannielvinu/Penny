@@ -1,3 +1,5 @@
+import hashlib
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -5,7 +7,15 @@ from pathlib import Path
 
 def git(root: Path, *args: str, check: bool = True) -> str:
     result = subprocess.run(
-        ["git", "-c", "core.hooksPath=/dev/null", "--no-pager", *args],
+        [
+            "git",
+            "-c",
+            "core.hooksPath=/dev/null",
+            "-c",
+            "commit.gpgsign=false",
+            "--no-pager",
+            *args,
+        ],
         cwd=root,
         capture_output=True,
         text=True,
@@ -13,6 +23,14 @@ def git(root: Path, *args: str, check: bool = True) -> str:
         errors="replace",
         timeout=30,
         shell=False,
+        env={
+            k: v
+            for k, v in os.environ.items()
+            if not any(
+                s in k.upper()
+                for s in ("KEY", "TOKEN", "SECRET", "PASSWORD", "BIFROST", "GIT_EXTERNAL_DIFF")
+            )
+        },
     )
     if check and result.returncode:
         raise ValueError(result.stderr.strip() or result.stdout.strip())
@@ -55,6 +73,12 @@ def undo(root: Path, record: dict) -> None:
         raise ValueError("Untracked files changed since run")
     from penny.safety.paths import safe_path
 
+    for path in untracked:
+        target = safe_path(root, path, write=True)
+        if hashlib.sha256(target.read_bytes()).hexdigest() != record.get(
+            "created_file_hashes", {}
+        ).get(path):
+            raise ValueError("A created file changed since run; preserve it before undo")
     for path in untracked:
         safe_path(root, path, write=True).unlink()
     git(root, "reset", "--hard", record["base_commit"])

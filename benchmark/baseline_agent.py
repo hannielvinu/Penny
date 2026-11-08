@@ -70,6 +70,7 @@ def run_baseline(root: Path, task, policy, pricing, settings, client=None) -> di
             )
             step = dict(number=number, **entry)
             steps.append(step)
+            args = {}
             try:
                 action = json.loads(response.content)
                 name, args = action["action"], action["args"]

@@ -67,13 +67,14 @@ class Finish(StrictModel):
     status: Literal["done", "cannot_complete"]
 
 
-ARGS = {
+ARGS: dict[str, type[StrictModel]] = {
     "search": Search,
     "read_symbol": ReadSymbol,
     "read_lines": ReadLines,
     "list_dir": ListDir,
     "apply_patch": Patch,
     "create_file": Create,
+    "write_file": Create,
     "run_tests": RunTests,
     "run_shell": Shell,
     "git": Git,
@@ -111,7 +112,12 @@ def parse(text: str) -> Action:
     return value
 
 
-def schema() -> str:
+def schema(patch_edits=True) -> str:
     return json.dumps(
-        {name: model.model_json_schema() for name, model in ARGS.items()}, separators=(",", ":")
+        {
+            name: model.model_json_schema()
+            for name, model in ARGS.items()
+            if (name != "write_file" if patch_edits else name != "apply_patch")
+        },
+        separators=(",", ":"),
     )

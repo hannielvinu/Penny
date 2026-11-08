@@ -15,10 +15,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
-      - run: python -m pip install -e '.[dev]'
+      - run: python -m pip install -r requirements-dev.lock
+      - run: python -m pip install --no-deps -e .
       - run: ruff check .
       - run: ruff format --check .
       - run: pytest --cov=penny --cov-report=term-missing
+      - run: coverage report --include='*/penny/safety/*,*/penny/agent/guard.py,*/penny/cost/*,*/penny/exec/patch.py' --fail-under=90
       - run: python -m build
       - run: mypy src/penny
         continue-on-error: true

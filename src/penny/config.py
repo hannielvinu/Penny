@@ -21,7 +21,10 @@ class Settings(BaseSettings):
 def read_yaml(path: Path) -> dict:
     if not path.exists():
         return {}
-    value = yaml.safe_load(path.read_text(encoding="utf-8"))
+    try:
+        value = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except yaml.YAMLError as exc:
+        raise ValueError(f"Invalid YAML in {path.name}; check indentation and quoting") from exc
     if value is None:
         return {}
     if not isinstance(value, dict):

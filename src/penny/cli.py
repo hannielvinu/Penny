@@ -1,3 +1,4 @@
+import fnmatch
 import json
 import re
 import shutil
@@ -9,6 +10,7 @@ import httpx
 import typer
 from rich.table import Table
 
+from penny.agent.guard import Chunk, prepare
 from penny.agent.loop import run as agent_run
 from penny.config import Settings
 from penny.cost.estimate import tokens
@@ -23,6 +25,7 @@ from penny.report.html import index
 from penny.report.html import receipt as render_receipt
 from penny.report.model import RunRecord
 from penny.safety.approvals import Approval, DenyAllApprover, InteractiveApprover
+from penny.safety.paths import state_path
 from penny.safety.risk import Risk
 from penny.ui.term import Terminal
 from penny.version import __version__
@@ -33,6 +36,13 @@ app.add_typer(pricing_app, name="pricing")
 EXIT = dict(success=0, failed=1, gateway_error=3, budget_stopped=4, aborted=5, denied=5)
 
 
+@app.callback()
+def mode_banner():
+    """Keep scripted development mode visible without polluting JSON stdout."""
+    if Settings().penny_mock:
+        typer.echo("MOCK MODE — scripted test double; usage is synthetic.", err=True)
+
+
 def fail(exc):
     typer.echo(f"Penny: {exc}", err=True)
     raise typer.Exit(2)
@@ -40,6 +50,7 @@ def fail(exc):
 
 def root_path(repo: Path) -> Path:
     root = repo.resolve()
+    state_path(root)
     if (root / ".penny").is_symlink():
         raise ValueError(".penny must not be a symlink")
     return root
@@ -47,7 +58,8 @@ def root_path(repo: Path) -> Path:
 
 def read_records(root: Path) -> list[RunRecord]:
     records = []
-    for path in (root / ".penny/runs").glob("*/run.json"):
+    for path in state_path(root, "runs").glob("*/run.json"):
+        state_path(root, path.relative_to(root / ".penny").as_posix())
         records.append(RunRecord.model_validate_json(path.read_text(encoding="utf-8")))
     return records
 
@@ -115,14 +127,14 @@ def doctor(repo: Path = Path("."), plain: bool = False):
             "PASS" if policy.test_command or detect(root) else "WARN",
             policy.test_command or detect(root) or "Set test_command",
         )
-        for name, key in (
+        for name, secret_key in (
             ("Cloud key", settings.bifrost_vk_dev),
             ("Local key", settings.bifrost_vk_local),
         ):
             add(
                 name,
-                "PASS" if key.get_secret_value() else "WARN",
-                "present" if key.get_secret_value() else "Run scripts/bootstrap_bifrost.py",
+                "PASS" if secret_key.get_secret_value() else "WARN",
+                "present" if secret_key.get_secret_value() else "Run scripts/bootstrap_bifrost.py",
             )
         pricing = load_pricing(root)
         missing = [
@@ -174,11 +186,11 @@ def doctor(repo: Path = Path("."), plain: bool = False):
                                 max_tokens=1,
                             ),
                         )
-                        text = probe.text.lower()
-                        rejected = probe.status_code in {400, 403} and any(
-                            s in text
-                            for s in ("not allowed", "not permitted", "access", "provider", "model")
-                        )
+                        evidence = probe.json()
+                        rejected = probe.status_code == 403 and evidence.get("type") in {
+                            "provider_blocked",
+                            "model_blocked",
+                        }
                         add(
                             "Local key isolation",
                             "PASS" if rejected else "FAIL",
@@ -218,13 +230,23 @@ def quote(
         policy, pricing = load_policy(root), load_pricing(root)
         repo_map = RepoMap(root).build()
         text = repo_map.compact(task, int(policy.limits.max_prompt_tokens * 0.35))
-        model = policy.models.local if private or policy.confidential else policy.models.cheap
+        policy.confidential |= private
+        map_private = any(
+            fnmatch.fnmatch(f["path"], glob)
+            for f in repo_map.files
+            for glob in policy.confidential_globs
+        )
+        _, route_name, _ = prepare(
+            [Chunk(task), Chunk(text, sensitivity="confidential" if map_private else "public")],
+            policy,
+        )
+        model = policy.models.local if route_name == "local" else policy.models.cheap
         Terminal(plain, json_output).emit(
             dict(
                 event="quote",
                 mock=Settings().penny_mock,
                 quote=make_quote(repo_map, tokens(text), pricing, model),
-                route="local" if private or policy.confidential else "cloud",
+                route=route_name,
                 budget=policy.limits.budget_usd,
             )
         )
@@ -324,7 +346,7 @@ def receipt(
     try:
         root = root_path(repo)
         record = get_record(root, run_id)
-        path = root / ".penny/runs" / record.id / "receipt.html"
+        path = state_path(root, f"runs/{record.id}/receipt.html")
         path.write_text(render_receipt(record), encoding="utf-8")
         typer.echo(str(path))
         if open_browser:
@@ -340,11 +362,11 @@ def report(repo: Path = Path("."), open_browser: bool = typer.Option(False, "--o
         root = root_path(repo)
         folder = root / ".penny"
         folder.mkdir(exist_ok=True)
-        path = folder / "index.html"
+        path = state_path(root, "index.html")
         path.write_text(index(read_records(root)), encoding="utf-8")
         results = sorted((root / "benchmark/results").glob("*.json"))
         latest = json.loads(results[-1].read_text(encoding="utf-8")) if results else None
-        (folder / "benchmark.html").write_text(benchmark_page(latest), encoding="utf-8")
+        state_path(root, "benchmark.html").write_text(benchmark_page(latest), encoding="utf-8")
         typer.echo(str(path))
         if open_browser:
             webbrowser.open(path.as_uri())
@@ -392,7 +414,7 @@ def chaos(action: str = "status", mode: str = "503"):
 
 
 @app.command()
-def bench(n: int = 3, repo: Path = Path("."), task: str | None = None):
+def bench(n: int = 3, repo: Path = Path("."), task: str | None = None, ablate: str | None = None):
     """Run the real pre-registered comparison (refuses MOCK)."""
     if Settings().penny_mock:
         fail("Benchmark refuses MOCK MODE. Configure a real Bifrost gateway.")
@@ -403,6 +425,6 @@ def bench(n: int = 3, repo: Path = Path("."), task: str | None = None):
 
     runner = runpy.run_path(str(script))
     try:
-        runner["run_benchmark"](root_path(repo), n=n, task_filter=task)
+        runner["run_benchmark"](root_path(repo), n=n, task_filter=task, ablate=ablate)
     except (ValueError, OSError) as exc:
         fail(exc)

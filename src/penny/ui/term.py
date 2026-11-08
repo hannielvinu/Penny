@@ -3,6 +3,7 @@ import os
 
 from rich.console import Console
 from rich.panel import Panel
+from rich.text import Text
 from rich.theme import Theme
 
 
@@ -43,8 +44,9 @@ class Terminal:
         elif kind == "finished":
             self.console.print(
                 Panel(
-                    f"Status: {event['status'].upper()}\nTokens: {event['totals']['tokens_in']:,} in / {event['totals']['tokens_out']:,} out\nReceipt: {event['receipt']}\n{event.get('error') or ''}\nUndo: {event['undo']}\nBrowse all receipts: penny report",
+                    Text(
+                        f"Status: {event['status'].upper()}\nTokens: {event['totals']['tokens_in']:,} in / {event['totals']['tokens_out']:,} out\nReceipt: {event['receipt']}\n{event.get('error') or ''}\nUndo: {event['undo']}\nBrowse all receipts: penny report"
+                    ),
                     title="MOCK receipt" if event["mock"] else "Penny · Receipt",
-                    markup=False,
                 )
             )

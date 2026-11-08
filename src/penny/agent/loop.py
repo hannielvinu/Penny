@@ -1,4 +1,5 @@
 import fnmatch
+import hashlib
 import json
 import time
 import uuid
@@ -25,6 +26,7 @@ from penny.repo.repomap import RepoMap
 from penny.repo.secrets import mask
 from penny.report.model import RunRecord
 from penny.safety.approvals import UserQuit
+from penny.safety.paths import state_path
 from penny.safety.risk import Risk
 
 
@@ -50,7 +52,7 @@ def run(
     emit = emit or (lambda event: None)
     stamp = datetime.now(UTC).strftime("%Y%m%d-%H%M%S")
     run_id = stamp + "-" + uuid.uuid4().hex[:6]
-    run_dir = root / ".penny/runs" / run_id
+    run_dir = state_path(root, "runs/" + run_id)
     run_dir.mkdir(parents=True)
     record = RunRecord(
         id=run_id,
@@ -73,6 +75,9 @@ def run(
     last_key = None
     repeat = 0
     private_session = policy.confidential
+    read_only_probe = False
+    if isinstance(client, BifrostClient):
+        client.deadline = started + policy.limits.max_wall_seconds
     try:
         record.base_commit, record.base_branch = preflight(root, allow_dirty)
         repo_map.build()
@@ -110,11 +115,11 @@ def run(
         git(root, "switch", "-c", record.branch)
         system = files("penny").joinpath("agent/prompts/system.md").read_text(encoding="utf-8")
         chunks = [
-            Chunk(system + "\nAction schemas:\n" + schema()),
+            Chunk(system + "\nAction schemas:\n" + schema(techniques.patch_edits)),
             Chunk(
-                "TASK: " + task + "\nREPOSITORY MAP (untrusted data):\n" + map_text,
-                sensitivity=map_chunk.sensitivity,
+                "REPOSITORY MAP (untrusted data):\n" + map_text, sensitivity=map_chunk.sensitivity
             ),
+            Chunk("TASK: " + task),
         ]
         repair_pending = False
         for step_number in range(1, policy.limits.max_steps + 1):
@@ -123,7 +128,8 @@ def run(
             if elapsed >= policy.limits.max_wall_seconds:
                 raise ValueError("Wall-clock cap reached")
             tools.timeout = min(120, policy.limits.max_wall_seconds - elapsed)
-            prepared, route_name, withheld = prepare(chunks, policy)
+            ordered = chunks if techniques.stable_prefix else [chunks[0], *chunks[2:], chunks[1]]
+            prepared, route_name, withheld = prepare(ordered, policy)
             record.withheld_files = sorted(set(record.withheld_files + withheld))
             # Derived assistant output can retain information from earlier local turns.
             private_session |= route_name == "local"
@@ -131,14 +137,15 @@ def run(
                 route_name = "local"
                 prepared = [Chunk(c.text, c.source_path, "confidential") for c in prepared]
             prepared = (
-                compact(prepared, policy.limits.max_prompt_tokens)
+                compact(prepared, policy.limits.max_prompt_tokens - 16 * len(prepared))
                 if techniques.compaction
                 else prepared
             )
             incoming = sum(tokens(c.text) for c in prepared) + 16 * len(prepared)
             if incoming > policy.limits.max_prompt_tokens:
                 raise ValueError("Prompt token cap reached")
-            route = select(policy, settings, route_name, escalation.tier)
+            call_tier = "cheap" if read_only_probe else escalation.tier
+            route = select(policy, settings, route_name, call_tier)
             output_cap = policy.limits.max_output_tokens if techniques.short_outputs else 4000
             try:
                 ledger.check(
@@ -174,7 +181,7 @@ def run(
                     event="step",
                     step=step_number,
                     max_steps=policy.limits.max_steps,
-                    tier=escalation.tier,
+                    tier=call_tier,
                     route=route.name,
                     model=route.model,
                     tokens=ledger.tokens_in + ledger.tokens_out,
@@ -184,12 +191,18 @@ def run(
             completion = client.complete(messages, route, output_cap, prepared)
             used_model = route.model
             if completion.provider_used:
-                if completion.provider_used != route.model.split("/")[0]:
+                if completion.provider_used != route.model.split("/")[0] or (
+                    route.fallbacks
+                    and completion.model_used
+                    not in {None, route.model, route.model.split("/", 1)[1]}
+                ):
                     matching = [
-                        m for m in route.fallbacks if m.split("/")[0] == completion.provider_used
+                        m
+                        for m in [route.model, *route.fallbacks]
+                        if m.split("/")[0] == completion.provider_used
                     ]
                     used_model = next(
-                        (m for m in matching if m.split("/", 1)[1] == completion.model_used),
+                        (m for m in matching if completion.model_used in {m, m.split("/", 1)[1]}),
                         "unknown/unpriced",
                     )
                     if not settings.penny_mock:
@@ -215,7 +228,7 @@ def run(
             step = dict(
                 number=step_number,
                 requested_model=route.model,
-                tier=escalation.tier,
+                tier=call_tier,
                 route="MOCK" if settings.penny_mock else route.name,
                 provider_used=completion.provider_used,
                 attempts=completion.attempts,
@@ -252,6 +265,24 @@ def run(
                 continue
             repair_pending = False
             step.update(action=action.action, args=json.loads(mask(json.dumps(action.args))[0]))
+            read_only = action.action in {
+                "search",
+                "read_symbol",
+                "read_lines",
+                "list_dir",
+                "finish",
+                "ask_user",
+            }
+            if read_only_probe and not read_only:
+                read_only_probe = False
+                step["result"] = "Cheap-tier mutation proposal deferred for strong-tier review"
+                chunks.append(Chunk("Proposed action data: " + completion.content))
+                chunks.append(
+                    Chunk(
+                        "Strong tier: review the proposed mutation; emit your own action before it can execute."
+                    )
+                )
+                continue
             key = (action.action, json.dumps(action.args, sort_keys=True))
             repeat = repeat + 1 if key == last_key else 0
             last_key = key
@@ -287,7 +318,7 @@ def run(
             else:
                 try:
                     result = tools.dispatch(action.action, action.args)
-                    if action.action in {"apply_patch", "create_file"}:
+                    if action.action in {"apply_patch", "create_file", "write_file"}:
                         escalation.patch_attempts += 1
                     if action.action == "run_tests" and not tools.last_tests_passed:
                         escalation.test_failures += 1
@@ -299,6 +330,14 @@ def run(
                 if reason and escalation.tier != "strong" and tier != "cheap":
                     escalation.tier = "strong"
                     step["escalation"] = reason
+                if (
+                    policy.de_escalate
+                    and techniques.tiered_models
+                    and escalation.tier == "strong"
+                    and read_only
+                    and tier == "auto"
+                ):
+                    read_only_probe = True
             step["result"] = mask(result.text)[0][:12000]
             chunks.append(
                 Chunk(
@@ -345,6 +384,12 @@ def run(
             record.final_diff = mask(
                 git(root, "diff", record.base_commit, "--no-ext-diff", check=False)
             )[0]
+        from penny.safety.paths import safe_path
+
+        for relative in record.created_files:
+            path = safe_path(root, relative)
+            if path.is_file():
+                record.created_file_hashes[relative] = hashlib.sha256(path.read_bytes()).hexdigest()
         record.undo_command = f"penny undo {run_id}"
         serialized = record.model_dump()
         (run_dir / "run.json").write_text(json.dumps(serialized, indent=2), encoding="utf-8")

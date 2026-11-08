@@ -35,7 +35,7 @@ def bootstrap(base_url: str, headers: dict, client=None):
         response = client.get("/api/governance/virtual-keys")
         response.raise_for_status()
         data = response.json()
-        existing = data.get("virtual_keys", []) if isinstance(data, dict) else data
+        existing = (data.get("virtual_keys") or []) if isinstance(data, dict) else (data or [])
         names = {v["name"] for v in existing}
         configs = [
             ("penny-dev", ["openai", "anthropic"], 0.5, "BIFROST_VK_DEV"),

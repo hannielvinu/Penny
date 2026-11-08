@@ -46,6 +46,7 @@ def retry_delay(value: str) -> float:
 
 class BifrostClient:
     def __init__(self, base_url: str, transport=None, sleep=time.sleep):
+        self.deadline: float | None = None
         self.http = httpx.Client(
             base_url=base_url.rstrip("/") + "/",
             timeout=httpx.Timeout(60, connect=5),
@@ -72,6 +73,11 @@ class BifrostClient:
         )
         started = time.monotonic()
         for attempt in range(1, 4):
+            if self.deadline is not None:
+                remaining = self.deadline - time.monotonic()
+                if remaining <= 0:
+                    raise Timeout("Run wall-clock cap reached")
+                self.http.timeout = httpx.Timeout(min(60, remaining), connect=min(5, remaining))
             try:
                 response = self.http.post(
                     "v1/chat/completions", json=payload, headers={"x-bf-vk": route.key}
@@ -92,6 +98,8 @@ class BifrostClient:
                     raise GatewayBudgetExceeded("Budget enforced by the gateway virtual key")
                 if response.status_code == 429:
                     delay = retry_delay(response.headers.get("Retry-After", "1"))
+                    if self.deadline is not None and time.monotonic() + delay >= self.deadline:
+                        raise Timeout("Retry would exceed run wall-clock cap")
                     if attempt < 3 and delay <= 60:
                         self.sleep(delay)
                         continue
@@ -110,6 +118,11 @@ class BifrostClient:
                     raise ValueError("Non-text completion")
                 usage = data.get("usage") or {}
                 authoritative = "prompt_tokens" in usage and "completion_tokens" in usage
+                if authoritative and any(
+                    type(usage[k]) is not int or usage[k] < 0
+                    for k in ("prompt_tokens", "completion_tokens")
+                ):
+                    raise ValueError("Invalid usage counts")
                 metadata = data.get("extra_fields") or {}
                 provider = metadata.get("provider")
                 if provider is not None and not isinstance(provider, str):

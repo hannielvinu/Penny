@@ -6,6 +6,7 @@ from typing import Protocol
 
 from rich.console import Console
 from rich.panel import Panel
+from rich.text import Text
 
 from penny.safety.risk import Risk
 
@@ -56,10 +57,9 @@ class InteractiveApprover:
             return True
         self.console.print(
             Panel(
-                request.content,
+                Text(request.content),
                 title=f"[{request.risk}] {request.kind}",
                 subtitle=f"Cost so far: {request.cost_usd if request.cost_usd is not None else 'price not configured'}",
-                markup=False,
             )
         )
         while True:

@@ -6,6 +6,7 @@ import yaml
 from pydantic import Field, field_validator
 
 from penny.config import Limits, StrictModel, read_yaml
+from penny.safety.paths import state_path
 
 
 class Models(StrictModel):
@@ -51,7 +52,7 @@ def example_policy() -> str:
 
 
 def load_policy(repo: Path) -> Policy:
-    path = repo / ".penny/policy.yaml"
+    path = state_path(repo, "policy.yaml")
     return Policy.model_validate(
         read_yaml(path) if path.exists() else yaml.safe_load(example_policy())
     )

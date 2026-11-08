@@ -50,6 +50,20 @@ def test_patch_unique_atomic(repo):
         preview(repo, ".env", content="secret")
 
 
+def test_atomic_replace_failure_preserves_original(repo, monkeypatch):
+    path = repo / "example.py"
+    original = path.read_text()
+
+    def failed(*args):
+        raise OSError("simulated filesystem refusal")
+
+    monkeypatch.setattr("penny.exec.patch.os.replace", failed)
+    with pytest.raises(OSError):
+        atomic_write(path, "new contents")
+    assert path.read_text() == original
+    assert not list(repo.glob(".penny-write-*"))
+
+
 def test_trim_and_shell(repo):
     output = (
         "noise\n" * 2000 + "FAILED test_tax - AssertionError\nE assert 1 == 2\n=== 1 failed ==="

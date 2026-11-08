@@ -1,3 +1,4 @@
+import re
 import shlex
 from enum import StrEnum
 from pathlib import Path, PureWindowsPath
@@ -34,7 +35,7 @@ def classify(command: str | list[str], root: Path) -> tuple[Risk, str]:
             continue
         if PureWindowsPath(value).drive or "\\" in value:
             return Risk.BLOCKED, "External or ambiguous path"
-        if "/" in value or value in {"..", ".git", ".penny"}:
+        if "/" in value or value in {"..", ".git", ".penny"} or (root / value).is_symlink():
             path = (root / value).resolve()
             if not path.is_relative_to(root) or any(
                 p in {".git", ".penny"} for p in path.relative_to(root).parts
@@ -47,7 +48,10 @@ def classify(command: str | list[str], root: Path) -> tuple[Risk, str]:
     if (
         exe == "git"
         and "push" in args
-        and any(x.startswith("--force") or x == "-f" or x.startswith("+") for x in args[2:])
+        and any(
+            x.startswith("--force") or re.fullmatch(r"-[a-zA-Z]*f[a-zA-Z]*", x) or x.startswith("+")
+            for x in args[2:]
+        )
     ):
         return Risk.BLOCKED, "Force push"
     if exe in {"rm", "chmod"} and any(x in {"/", "~", ".", "./"} for x in args[1:]):

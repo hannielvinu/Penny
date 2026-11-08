@@ -12,15 +12,19 @@ class PatchError(ValueError):
 
 
 def preview(
-    root: Path, path: str, edits: list[dict] | None = None, content: str | None = None
+    root: Path,
+    path: str,
+    edits: list[dict] | None = None,
+    content: str | None = None,
+    overwrite: bool = False,
 ) -> tuple[Path, str, str]:
     target = safe_path(root, path, write=True)
     if secret_path(path):
         raise PatchError("Writes to secret paths are refused")
     if content is not None:
-        if target.exists():
+        if target.exists() and not overwrite:
             raise PatchError("create_file refuses to overwrite existing files")
-        old, new = "", content
+        old, new = target.read_text(encoding="utf-8") if target.exists() else "", content
     else:
         old = target.read_text(encoding="utf-8")
         new = old

@@ -5,6 +5,29 @@ class PathViolation(ValueError):
     pass
 
 
+def state_path(root: Path, relative: str = "") -> Path:
+    """Internal state access: no symlink components or parent traversal."""
+    root = root.resolve()
+    part = Path(relative)
+    if (
+        part.is_absolute()
+        or relative.startswith("/")
+        or PureWindowsPath(relative).drive
+        or ".." in part.parts
+        or "\\" in relative
+    ):
+        raise PathViolation("Invalid internal state path")
+    target = root / ".penny" / part
+    cursor = root
+    for name in target.relative_to(root).parts:
+        cursor = cursor / name
+        if cursor.is_symlink():
+            raise PathViolation("Internal state must not contain symlinks")
+    if not target.resolve().is_relative_to(root):
+        raise PathViolation("Internal state escapes repository")
+    return target
+
+
 def safe_path(root: Path, value: str, *, write: bool = False) -> Path:
     root = root.resolve()
     candidate = Path(value)

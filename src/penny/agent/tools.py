@@ -8,6 +8,7 @@ from penny.exec.patch import atomic_write, preview
 from penny.exec.shell import execute
 from penny.exec.tests_runner import detect
 from penny.exec.trim import trim
+from penny.repo.grep import search_text
 from penny.repo.secrets import mask
 from penny.repo.slices import Slices
 from penny.safety.approvals import Approval
@@ -42,6 +43,14 @@ class Tools:
         return request.decision
 
     def run_command(self, command, *, tests=False) -> Chunk:
+        command_args = shlex.split(command) if isinstance(command, str) else command
+        if (
+            command_args
+            and command_args[0].replace("\\", "/").split("/")[-1].removesuffix(".exe") == "git"
+            and "push" in command_args
+            and not self.policy.git.allow_push
+        ):
+            return Chunk("user denied: git push is disabled by policy")
         risk, reason = classify(command, self.root)
         allowed = risk == Risk.LOW and normalized(command) in [
             normalized(c) for c in self.policy.auto_approve.commands
@@ -70,6 +79,8 @@ class Tools:
         if action == "search":
             self.map.build()
             matches = self.map.search(args["query"], args["max_results"])
+            if not matches:
+                matches = search_text(self.map, args["query"], args["max_results"])
             confidential = any(
                 fnmatch.fnmatch(m["path"], glob)
                 for m in matches
@@ -102,19 +113,30 @@ class Tools:
                 )
             )
             return Chunk(json.dumps(names[:200]), args["path"])
-        if action in {"apply_patch", "create_file"}:
+        if action in {"apply_patch", "create_file", "write_file"}:
+            if action == "write_file" and self.techniques.patch_edits:
+                return Chunk("Whole-file overwrites are disabled; use apply_patch")
             if action == "apply_patch" and not self.techniques.patch_edits:
                 return Chunk(
-                    "Patch edits disabled; use create_file for new files and read_lines for context"
+                    "Patch edits disabled; use write_file with the complete replacement content"
                 )
             target, new, diff = preview(
-                self.root, args["path"], args.get("edits"), args.get("content")
+                self.root,
+                args["path"],
+                args.get("edits"),
+                args.get("content"),
+                overwrite=action == "write_file",
             )
-            if not self.approve("write", Risk.MEDIUM, diff or f"Create empty file {args['path']}"):
+            was_new = not target.exists()
+            if not self.approve("write", Risk.MEDIUM, diff or f"Write empty file {args['path']}"):
                 return Chunk("user denied: " + action)
             # Recheck symlinks and the exact snapshot after user interaction.
             checked, checked_new, checked_diff = preview(
-                self.root, args["path"], args.get("edits"), args.get("content")
+                self.root,
+                args["path"],
+                args.get("edits"),
+                args.get("content"),
+                overwrite=action == "write_file",
             )
             if checked != target or checked_new != new or checked_diff != diff:
                 raise ValueError("File changed during approval; request a fresh patch")
@@ -122,20 +144,20 @@ class Tools:
             self.last_tests_passed = False
             if args["path"] not in self.record.files_changed:
                 self.record.files_changed.append(args["path"])
-            if action == "create_file":
+            if was_new:
                 self.record.created_files.append(args["path"])
             return Chunk("Applied patch:\n" + diff, args["path"])
         if action == "run_tests":
             command = self.policy.test_command or detect(self.root)
             if not command:
                 return Chunk("No test command detected; configure test_command")
-            target = args.get("target")
+            test_target = args.get("target")
             command_args = shlex.split(command)
-            if target:
-                safe_path(self.root, target.split("::")[0])
-                if target.startswith("-"):
+            if test_target:
+                safe_path(self.root, test_target.split("::")[0])
+                if test_target.startswith("-"):
                     raise ValueError("Test target cannot be an option")
-                command_args.append(target)
+                command_args.append(test_target)
             return self.run_command(command_args, tests=True)
         if action == "run_shell":
             self.last_tests_passed = False
