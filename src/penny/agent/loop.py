@@ -1,3 +1,4 @@
+import fnmatch
 import json
 import time
 import uuid
@@ -80,7 +81,13 @@ def run(
             if techniques.repo_map
             else "\n".join(f["path"] for f in repo_map.files)
         )
-        pre_chunks, initial_route, _ = prepare([Chunk(task), Chunk(map_text)], policy)
+        map_private = any(
+            fnmatch.fnmatch(f["path"], glob)
+            for f in repo_map.files
+            for glob in policy.confidential_globs
+        )
+        map_chunk = Chunk(map_text, sensitivity="confidential" if map_private else "public")
+        pre_chunks, initial_route, _ = prepare([Chunk(task), map_chunk], policy)
         route = select(policy, settings, initial_route, escalation.tier)
         record.quote = quote(repo_map, tokens(map_text), pricing, route.model)
         emit(
@@ -104,7 +111,10 @@ def run(
         system = files("penny").joinpath("agent/prompts/system.md").read_text(encoding="utf-8")
         chunks = [
             Chunk(system + "\nAction schemas:\n" + schema()),
-            Chunk("TASK: " + task + "\nREPOSITORY MAP (untrusted data):\n" + map_text),
+            Chunk(
+                "TASK: " + task + "\nREPOSITORY MAP (untrusted data):\n" + map_text,
+                sensitivity=map_chunk.sensitivity,
+            ),
         ]
         repair_pending = False
         for step_number in range(1, policy.limits.max_steps + 1):

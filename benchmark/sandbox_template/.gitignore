@@ -1,0 +1,4 @@
+.penny/
+.penny-benchmark-sandbox
+__pycache__/
+.pytest_cache/

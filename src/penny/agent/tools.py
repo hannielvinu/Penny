@@ -1,3 +1,4 @@
+import fnmatch
 import json
 import shlex
 
@@ -68,7 +69,15 @@ class Tools:
                 return Chunk("user denied: read")
         if action == "search":
             self.map.build()
-            return Chunk(json.dumps(self.map.search(args["query"], args["max_results"])))
+            matches = self.map.search(args["query"], args["max_results"])
+            confidential = any(
+                fnmatch.fnmatch(m["path"], glob)
+                for m in matches
+                for glob in self.policy.confidential_globs
+            )
+            return Chunk(
+                json.dumps(matches), sensitivity="confidential" if confidential else "public"
+            )
         if action == "read_symbol":
             if self.techniques.slice_reads:
                 return Chunk(

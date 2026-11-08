@@ -1,0 +1,20 @@
+{
+  "client": {
+    "enforce_auth_on_inference": true,
+    "disable_content_logging": true
+  },
+  "providers": {
+    "openai": {
+      "keys": [{"name": "openai-env", "value": "env.OPENAI_API_KEY", "models": ["*"], "weight": 1.0}],
+      "network_config": {"base_url": "http://chaos:8099/v1", "default_request_timeout_in_seconds": 65, "max_retries": 1}
+    },
+    "anthropic": {
+      "keys": [{"name": "anthropic-env", "value": "env.ANTHROPIC_API_KEY", "models": ["*"], "weight": 1.0}],
+      "network_config": {"default_request_timeout_in_seconds": 60, "max_retries": 1}
+    },
+    "ollama": {
+      "keys": [{"name": "local", "value": "ollama", "models": ["*"], "weight": 1.0}],
+      "network_config": {"base_url": "http://host.docker.internal:11434/v1", "default_request_timeout_in_seconds": 60, "max_retries": 0}
+    }
+  }
+}

@@ -1,0 +1,12 @@
+.git
+.venv
+.env*
+.penny
+pricing.yaml
+benchmark
+docs
+tests
+node_modules
+dist
+build
+__pycache__

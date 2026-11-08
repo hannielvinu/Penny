@@ -25,6 +25,7 @@ packages = ["src/penny"]
 [tool.ruff]
 target-version = "py311"
 line-length = 100
+extend-exclude = ["benchmark/sandbox_template"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]

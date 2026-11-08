@@ -1,0 +1,64 @@
+version: 1
+synthetic: true
+success: full unmodified acceptance suite passes; only allowed files changed
+tasks:
+  - id: pagination
+    prompt: Fix the one-based pagination bug in shopkit. Run the complete test suite.
+    allowed_files: [shopkit/utils/pagination.py]
+    setup:
+      - path: shopkit/utils/pagination.py
+        search: start = (page - 1) * page_size
+        replace: start = page * page_size
+  - id: tax_rounding
+    prompt: Fix half-cent rounding in tax calculation; currency must round half up. Run all tests.
+    allowed_files: [shopkit/tax/calculator.py]
+    setup:
+      - path: shopkit/tax/calculator.py
+        search: rounding=ROUND_HALF_UP
+        replace: rounding="ROUND_DOWN"
+  - id: rename_discount
+    prompt: Rename discount_total to discounted_total across its definition, all three calling modules, and tests, preserving behavior. Run all tests. Do not retain the old public function name.
+    allowed_files: [shopkit/pricing/discounts.py, shopkit/pricing/quotes.py, shopkit/orders/checkout.py, shopkit/orders/cart.py, tests/test_shopkit.py]
+    setup:
+      - path: tests/test_shopkit.py
+        search: from shopkit.pricing.discounts import discount_total
+        replace: from shopkit.pricing.discounts import discounted_total as discount_total
+  - id: empty_sales
+    prompt: Make average_sale return zero for an empty sales period and preserve nonempty averages. Run all tests.
+    allowed_files: [shopkit/reports/sales.py]
+    setup:
+      - path: shopkit/reports/sales.py
+        search: return sum(values) / len(values) if values else 0.0
+        replace: return sum(values) / len(values)
+  - id: ordered_unique
+    prompt: Implement unique_ordered(values) in shopkit/utils/collections.py. Return each hashable value once, preserving its first occurrence. Handle empty input. Tests are provided; run all tests.
+    allowed_files: [shopkit/utils/collections.py]
+    setup:
+      - path: shopkit/utils/collections.py
+        search: return list(dict.fromkeys(values))
+        replace: raise NotImplementedError("Implement unique_ordered")
+  - id: cross_module_shipping
+    prompt: The fulfillment total is wrong. Find and correct its root cause in another module. Shipping should charge two currency units per kilogram. Run all tests.
+    allowed_files: [shopkit/shipping/rates.py]
+    setup:
+      - path: shopkit/shipping/rates.py
+        search: return weight * 2.0
+        replace: return weight * 3.0
+  - id: extract_address_helper
+    prompt: Extract duplicated billing_address and delivery_address normalization into normalize_address(value), preserving both public entrypoints and behavior. Both must call the helper. Run all tests.
+    allowed_files: [shopkit/users/addresses.py]
+    setup:
+      - path: shopkit/users/addresses.py
+        search: return normalize_address(value)
+        replace: return " ".join(value.strip().lower().split())
+        all: true
+  - id: cli_uppercase
+    prompt: Add --uppercase to shopkit.utils.cli.main; keep the positional name. Return the uppercase name when set and the unchanged name otherwise. Run all tests.
+    allowed_files: [shopkit/utils/cli.py]
+    setup:
+      - path: shopkit/utils/cli.py
+        search: '    parser.add_argument("--uppercase", action="store_true")'
+        replace: '    # uppercase flag to be implemented'
+      - path: shopkit/utils/cli.py
+        search: return args.name.upper() if args.uppercase else args.name
+        replace: return args.name
