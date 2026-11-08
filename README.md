@@ -6,6 +6,8 @@ Penny is a CLI coding agent for solo developers, students, and freelancers who w
 
 **Quote → Approve → Receipt.** Search symbols, read a small slice, approve a patch, run tests, and keep the accounting on your machine.
 
+**Hosted demo:** [Open Penny](https://penny-coding-agent.heartyopossum3.chatgpt.site) (owner-private; sign in with the publishing account). Explore the recorded MOCK workflow, inspect the full receipt, or open your own run.json locally in the browser. The coding CLI continues to run on your machine. [Deployment and reproduction](docs/DEPLOYMENT.md).
+
 ![Penny receipt — MOCK scripted model and synthetic usage](docs/screenshots/MOCK-receipt-overview.png)
 
 ## Submission status
