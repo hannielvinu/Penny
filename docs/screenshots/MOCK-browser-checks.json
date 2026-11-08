@@ -1,0 +1,127 @@
+[
+  {
+    "width": 360,
+    "scheme": "light",
+    "overflow": false,
+    "keyboard": true,
+    "reduced_motion": true,
+    "external_requests": 0,
+    "js_errors": [],
+    "screenshot": "MOCK-receipt-360-light.png"
+  },
+  {
+    "width": 390,
+    "scheme": "light",
+    "overflow": false,
+    "keyboard": true,
+    "reduced_motion": true,
+    "external_requests": 0,
+    "js_errors": [],
+    "screenshot": "MOCK-receipt-390-light.png"
+  },
+  {
+    "width": 768,
+    "scheme": "light",
+    "overflow": false,
+    "keyboard": true,
+    "reduced_motion": true,
+    "external_requests": 0,
+    "js_errors": [],
+    "screenshot": "MOCK-receipt-768-light.png"
+  },
+  {
+    "width": 1024,
+    "scheme": "light",
+    "overflow": false,
+    "keyboard": true,
+    "reduced_motion": true,
+    "external_requests": 0,
+    "js_errors": [],
+    "screenshot": "MOCK-receipt-1024-light.png"
+  },
+  {
+    "width": 1280,
+    "scheme": "light",
+    "overflow": false,
+    "keyboard": true,
+    "reduced_motion": true,
+    "external_requests": 0,
+    "js_errors": [],
+    "screenshot": "MOCK-receipt-1280-light.png"
+  },
+  {
+    "width": 1536,
+    "scheme": "light",
+    "overflow": false,
+    "keyboard": true,
+    "reduced_motion": true,
+    "external_requests": 0,
+    "js_errors": [],
+    "screenshot": "MOCK-receipt-1536-light.png"
+  },
+  {
+    "width": 360,
+    "scheme": "dark",
+    "overflow": false,
+    "keyboard": true,
+    "reduced_motion": true,
+    "external_requests": 0,
+    "js_errors": [],
+    "screenshot": "MOCK-receipt-360-dark.png"
+  },
+  {
+    "width": 390,
+    "scheme": "dark",
+    "overflow": false,
+    "keyboard": true,
+    "reduced_motion": true,
+    "external_requests": 0,
+    "js_errors": [],
+    "screenshot": "MOCK-receipt-390-dark.png"
+  },
+  {
+    "width": 768,
+    "scheme": "dark",
+    "overflow": false,
+    "keyboard": true,
+    "reduced_motion": true,
+    "external_requests": 0,
+    "js_errors": [],
+    "screenshot": "MOCK-receipt-768-dark.png"
+  },
+  {
+    "width": 1024,
+    "scheme": "dark",
+    "overflow": false,
+    "keyboard": true,
+    "reduced_motion": true,
+    "external_requests": 0,
+    "js_errors": [],
+    "screenshot": "MOCK-receipt-1024-dark.png"
+  },
+  {
+    "width": 1280,
+    "scheme": "dark",
+    "overflow": false,
+    "keyboard": true,
+    "reduced_motion": true,
+    "external_requests": 0,
+    "js_errors": [],
+    "screenshot": "MOCK-receipt-1280-dark.png"
+  },
+  {
+    "width": 1536,
+    "scheme": "dark",
+    "overflow": false,
+    "keyboard": true,
+    "reduced_motion": true,
+    "external_requests": 0,
+    "js_errors": [],
+    "screenshot": "MOCK-receipt-1536-dark.png"
+  },
+  {
+    "width": 1280,
+    "zoom": "200% CSS layout zoom",
+    "overflow": false
+  }
+]
