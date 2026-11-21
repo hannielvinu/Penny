@@ -1,0 +1,95 @@
+{
+  "run": {
+    "status": "failed",
+    "steps": [
+      {
+        "number": 1,
+        "model": "unknown/unpriced",
+        "tokens_in": 93,
+        "tokens_out": 1246,
+        "tokens_source": "provider",
+        "cost_usd": null,
+        "action": "list_dir"
+      },
+      {
+        "number": 2,
+        "model": "unknown/unpriced",
+        "tokens_in": 125,
+        "tokens_out": 1932,
+        "tokens_source": "provider",
+        "cost_usd": null,
+        "action": "list_dir"
+      },
+      {
+        "number": 3,
+        "model": "unknown/unpriced",
+        "tokens_in": 169,
+        "tokens_out": 422,
+        "tokens_source": "provider",
+        "cost_usd": null,
+        "action": "list_dir"
+      },
+      {
+        "number": 4,
+        "model": "unknown/unpriced",
+        "tokens_in": 194,
+        "tokens_out": 538,
+        "tokens_source": "provider",
+        "cost_usd": null,
+        "action": "read_file"
+      },
+      {
+        "number": 5,
+        "model": "unknown/unpriced",
+        "tokens_in": 231,
+        "tokens_out": 971,
+        "tokens_source": "provider",
+        "cost_usd": null,
+        "action": "read_file"
+      },
+      {
+        "number": 6,
+        "model": "unknown/unpriced",
+        "tokens_in": 1163,
+        "tokens_out": 500,
+        "tokens_source": "provider",
+        "cost_usd": null,
+        "action": "list_dir"
+      },
+      {
+        "number": 7,
+        "model": "unknown/unpriced",
+        "tokens_in": 1251,
+        "tokens_out": 468,
+        "tokens_source": "provider",
+        "cost_usd": null,
+        "action": "read_file"
+      }
+    ],
+    "errors": [
+      "Gateway returned an invalid completion response"
+    ],
+    "totals": {
+      "tokens_in": 3226,
+      "tokens_out": 6077,
+      "cost_usd": null,
+      "steps": 7,
+      "wall_ms": 70811
+    }
+  },
+  "acceptance": {
+    "passed": false,
+    "violations": [],
+    "test": {
+      "command": [
+        "/home/user/penny/.venv/bin/python3",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 1,
+      "output": "F...............................................                         [100%]\n=================================== FAILURES ===================================\n_______________________________ test_pagination ________________________________\n\n    def test_pagination():\n>       assert paginate(list(range(10)), 1, 3) == [0, 1, 2]\nE       assert [3, 4, 5] == [0, 1, 2]\nE         \nE         At index 0 diff: 3 != 0\nE         Use -v to get more diff\n\ntests/test_shopkit.py:19: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_shopkit.py::test_pagination - assert [3, 4, 5] == [0, 1, 2]\n1 failed, 47 passed in 0.10s\n",
+      "wall_ms": 351
+    }
+  }
+}

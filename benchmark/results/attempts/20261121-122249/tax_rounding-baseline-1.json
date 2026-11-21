@@ -1,0 +1,31 @@
+{
+  "run": {
+    "status": "failed",
+    "steps": [],
+    "errors": [
+      "Gateway rejected request HTTP 400"
+    ],
+    "totals": {
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "steps": 0,
+      "wall_ms": 320
+    }
+  },
+  "acceptance": {
+    "passed": false,
+    "violations": [],
+    "test": {
+      "command": [
+        "/home/user/penny/.venv/bin/python3",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 1,
+      "output": ".F..............................................                         [100%]\n=================================== FAILURES ===================================\n______________________________ test_tax_rounding _______________________________\n\n    def test_tax_rounding():\n>       assert calculate_tax(\"1.00\", \"0.005\") == Decimal(\"0.01\")\nE       AssertionError: assert Decimal('0.00') == Decimal('0.01')\nE        +  where Decimal('0.00') = calculate_tax('1.00', '0.005')\nE        +  and   Decimal('0.01') = Decimal('0.01')\n\ntests/test_shopkit.py:26: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_shopkit.py::test_tax_rounding - AssertionError: assert Deci...\n1 failed, 47 passed in 0.10s\n",
+      "wall_ms": 419
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "run": {
+    "id": "20261121-122301-a96861",
+    "version": "0.1.0",
+    "started_at": "2026-11-21T12:23:01.605599+00:00",
+    "finished_at": "2026-11-21T12:23:23.697502+00:00",
+    "status": "gateway_error",
+    "task": "Implement unique_ordered(values) in shopkit/utils/collections.py. Return each hashable value once, preserving its first occurrence. Handle empty input. Tests are provided; run all tests.",
+    "repo": "penny-benchmark-g3ze08mf",
+    "base_commit": "5358b1fa7fdccca0af5a5daecb0ca40dc3259bb4",
+    "base_branch": "main",
+    "branch": "penny/implement-unique-ordered-values-in-s-20261121-122301-a96861",
+    "allow_dirty": false,
+    "flags": {
+      "mock": false,
+      "private": false,
+      "tier": "auto"
+    },
+    "policy": {
+      "version": 1,
+      "confidential": false,
+      "confidential_globs": [
+        "secrets/**",
+        "**/*.pem",
+        ".env*",
+        "config/prod/**"
+      ],
+      "on_confidential": "go_local",
+      "de_escalate": true,
+      "test_command": null,
+      "auto_approve": {
+        "reads": true,
+        "commands": [
+          "pytest -q",
+          "python -m pytest -q"
+        ]
+      },
+      "limits": {
+        "budget_usd": 0.5,
+        "max_steps": 25,
+        "max_prompt_tokens": 6000,
+        "max_output_tokens": 800,
+        "max_wall_seconds": 900,
+        "token_cap": 150000
+      },
+      "models": {
+        "cheap": "groq/openai/gpt-oss-20b",
+        "strong": "groq/openai/gpt-oss-120b",
+        "local": "ollama/qwen2.5-coder:1.5b",
+        "local_strong": null,
+        "fallbacks": []
+      },
+      "git": {
+        "branch_prefix": "penny/",
+        "allow_push": false
+      }
+    },
+    "quote": {
+      "low": 8078,
+      "high": 44078,
+      "cost_low": 0.00087825,
+      "cost_high": 0.00479325,
+      "assumptions": "cold-start estimate, wide range; 6\u201314 steps; approx characters/4 tokens",
+      "files": 53
+    },
+    "steps": [],
+    "approvals": [
+      {
+        "kind": "quote",
+        "risk": "LOW",
+        "content": "{\n  \"low\": 8078,\n  \"high\": 44078,\n  \"cost_low\": 0.00087825,\n  \"cost_high\": 0.00479325,\n  \"assumptions\": \"cold-start estimate, wide range; 6\\u201314 steps; approx characters/4 tokens\",\n  \"files\": 53\n}",
+        "cost_usd": null,
+        "decision": true,
+        "timestamp": "2026-11-21T12:23:01.685003+00:00"
+      },
+      {
+        "kind": "git",
+        "risk": "MEDIUM",
+        "content": "git switch -c penny/implement-unique-ordered-values-in-s-20261121-122301-a96861",
+        "cost_usd": null,
+        "decision": true,
+        "timestamp": "2026-11-21T12:23:01.685185+00:00"
+      }
+    ],
+    "budget_events": [],
+    "failover_events": [],
+    "withheld_files": [],
+    "files_changed": [],
+    "created_files": [],
+    "created_file_hashes": {},
+    "tests": [],
+    "totals": {
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "steps": 0,
+      "wall_ms": 22063
+    },
+    "undo_command": "penny undo 20261121-122301-a96861",
+    "final_diff": "",
+    "error": "Gateway rejected request HTTP 400",
+    "summary": ""
+  },
+  "acceptance": {
+    "passed": false,
+    "violations": [],
+    "test": {
+      "command": [
+        "/home/user/penny/.venv/bin/python3",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 1,
+      "output": "....F...........................................                         [100%]\n=================================== FAILURES ===================================\n_____________________________ test_unique_ordered ______________________________\n\n    def test_unique_ordered():\n>       assert unique_ordered([3, 1, 3, 2, 1]) == [3, 1, 2]\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntests/test_shopkit.py:38: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nvalues = [3, 1, 3, 2, 1]\n\n    def unique_ordered(values: list) -> list:\n        \"\"\"Return unique hashable values in first-occurrence order.\"\"\"\n>       raise NotImplementedError(\"Implement unique_ordered\")\nE       NotImplementedError: Implement unique_ordered\n\nshopkit/utils/collections.py:91: NotImplementedError\n=========================== short test summary info ============================\nFAILED tests/test_shopkit.py::test_unique_ordered - NotImplementedError: Impl...\n1 failed, 47 passed in 0.10s\n",
+      "wall_ms": 391
+    }
+  }
+}

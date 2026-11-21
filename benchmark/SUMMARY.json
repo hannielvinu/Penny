@@ -1,0 +1,240 @@
+{
+  "sources": [
+    "20261121-122506.json",
+    "20261121-122819.json",
+    "20261121-123156.json",
+    "20261121-123504.json",
+    "20261121-124210.json"
+  ],
+  "tasks": 5,
+  "penny_passed": 4,
+  "baseline_passed": 4,
+  "both_passed": 4,
+  "penny_tokens_both": 52901,
+  "baseline_tokens_both": 60971,
+  "penny_steps_both": 17,
+  "baseline_steps_both": 41,
+  "penny_seconds_both": 332.4,
+  "penny_usd_both": 0.0454,
+  "baseline_usd_both": 0.0638,
+  "baseline_seconds_both": 486.1,
+  "rows": [
+    {
+      "task": "pagination",
+      "penny": {
+        "task": "pagination",
+        "agent": "penny",
+        "passed": true,
+        "status": "success",
+        "tokens": 12214,
+        "tokens_in": 12006,
+        "tokens_out": 208,
+        "steps": 4,
+        "seconds": 29.4,
+        "usd": 0.01044,
+        "raw": "20261121-122506/pagination-penny-1.json",
+        "models": {
+          "cheap": "groq/qwen/qwen3.8-27b",
+          "strong": "groq/qwen/qwen3.8-27b",
+          "local": "ollama/qwen2.5-coder:1.5b",
+          "local_strong": null,
+          "fallbacks": []
+        }
+      },
+      "baseline": {
+        "task": "pagination",
+        "agent": "baseline",
+        "passed": true,
+        "status": "success",
+        "tokens": 17991,
+        "tokens_in": 16812,
+        "tokens_out": 1179,
+        "steps": 11,
+        "seconds": 144.1,
+        "usd": 0.01817,
+        "raw": "20261121-122506/pagination-baseline-1.json",
+        "models": {
+          "cheap": "groq/qwen/qwen3.8-27b",
+          "strong": "groq/qwen/qwen3.8-27b",
+          "local": "ollama/qwen2.5-coder:1.5b",
+          "local_strong": null,
+          "fallbacks": []
+        }
+      }
+    },
+    {
+      "task": "tax_rounding",
+      "penny": {
+        "task": "tax_rounding",
+        "agent": "penny",
+        "passed": true,
+        "status": "success",
+        "tokens": 12307,
+        "tokens_in": 12120,
+        "tokens_out": 187,
+        "steps": 4,
+        "seconds": 84.5,
+        "usd": 0.01044,
+        "raw": "20261121-122819/tax_rounding-penny-1.json",
+        "models": {
+          "cheap": "groq/qwen/qwen3.8-27b",
+          "strong": "groq/qwen/qwen3.8-27b",
+          "local": "ollama/qwen2.5-coder:1.5b",
+          "local_strong": null,
+          "fallbacks": []
+        }
+      },
+      "baseline": {
+        "task": "tax_rounding",
+        "agent": "baseline",
+        "passed": true,
+        "status": "success",
+        "tokens": 16579,
+        "tokens_in": 15314,
+        "tokens_out": 1265,
+        "steps": 10,
+        "seconds": 131.3,
+        "usd": 0.01731,
+        "raw": "20261121-122819/tax_rounding-baseline-1.json",
+        "models": {
+          "cheap": "groq/qwen/qwen3.8-27b",
+          "strong": "groq/qwen/qwen3.8-27b",
+          "local": "ollama/qwen2.5-coder:1.5b",
+          "local_strong": null,
+          "fallbacks": []
+        }
+      }
+    },
+    {
+      "task": "empty_sales",
+      "penny": {
+        "task": "empty_sales",
+        "agent": "penny",
+        "passed": true,
+        "status": "success",
+        "tokens": 12408,
+        "tokens_in": 12151,
+        "tokens_out": 257,
+        "steps": 4,
+        "seconds": 85.2,
+        "usd": 0.01075,
+        "raw": "20261121-123156/empty_sales-penny-1.json",
+        "models": {
+          "cheap": "groq/qwen/qwen3.8-27b",
+          "strong": "groq/qwen/qwen3.8-27b",
+          "local": "ollama/qwen2.5-coder:1.5b",
+          "local_strong": null,
+          "fallbacks": []
+        }
+      },
+      "baseline": {
+        "task": "empty_sales",
+        "agent": "baseline",
+        "passed": true,
+        "status": "success",
+        "tokens": 13016,
+        "tokens_in": 11911,
+        "tokens_out": 1105,
+        "steps": 10,
+        "seconds": 101.2,
+        "usd": 0.01395,
+        "raw": "20261121-123156/empty_sales-baseline-1.json",
+        "models": {
+          "cheap": "groq/qwen/qwen3.8-27b",
+          "strong": "groq/qwen/qwen3.8-27b",
+          "local": "ollama/qwen2.5-coder:1.5b",
+          "local_strong": null,
+          "fallbacks": []
+        }
+      }
+    },
+    {
+      "task": "ordered_unique",
+      "penny": {
+        "task": "ordered_unique",
+        "agent": "penny",
+        "passed": true,
+        "status": "success",
+        "tokens": 15972,
+        "tokens_in": 15647,
+        "tokens_out": 325,
+        "steps": 5,
+        "seconds": 133.3,
+        "usd": 0.01382,
+        "raw": "20261121-123504/ordered_unique-penny-1.json",
+        "models": {
+          "cheap": "groq/qwen/qwen3.8-27b",
+          "strong": "groq/qwen/qwen3.8-27b",
+          "local": "ollama/qwen2.5-coder:1.5b",
+          "local_strong": null,
+          "fallbacks": []
+        }
+      },
+      "baseline": {
+        "task": "ordered_unique",
+        "agent": "baseline",
+        "passed": true,
+        "status": "success",
+        "tokens": 13385,
+        "tokens_in": 12228,
+        "tokens_out": 1157,
+        "steps": 10,
+        "seconds": 109.5,
+        "usd": 0.01441,
+        "raw": "20261121-123504/ordered_unique-baseline-1.json",
+        "models": {
+          "cheap": "groq/qwen/qwen3.8-27b",
+          "strong": "groq/qwen/qwen3.8-27b",
+          "local": "ollama/qwen2.5-coder:1.5b",
+          "local_strong": null,
+          "fallbacks": []
+        }
+      }
+    },
+    {
+      "task": "rename_discount",
+      "penny": {
+        "task": "rename_discount",
+        "agent": "penny",
+        "passed": false,
+        "status": "success",
+        "tokens": 55486,
+        "tokens_in": 54744,
+        "tokens_out": 742,
+        "steps": 13,
+        "seconds": 376.0,
+        "usd": 0.04676,
+        "raw": "20261121-124210/rename_discount-penny-1.json",
+        "models": {
+          "cheap": "groq/qwen/qwen3.8-27b",
+          "strong": "groq/qwen/qwen3.8-27b",
+          "local": "ollama/qwen2.5-coder:3b",
+          "local_strong": null,
+          "fallbacks": []
+        }
+      },
+      "baseline": {
+        "task": "rename_discount",
+        "agent": "baseline",
+        "passed": false,
+        "status": "failed",
+        "tokens": 29384,
+        "tokens_in": 28822,
+        "tokens_out": 562,
+        "steps": 25,
+        "seconds": 247.0,
+        "usd": 0.02531,
+        "raw": "20261121-124210/rename_discount-baseline-1.json",
+        "models": {
+          "cheap": "groq/qwen/qwen3.8-27b",
+          "strong": "groq/qwen/qwen3.8-27b",
+          "local": "ollama/qwen2.5-coder:3b",
+          "local_strong": null,
+          "fallbacks": []
+        }
+      }
+    }
+  ],
+  "token_reduction_pct": 13.2,
+  "step_reduction_pct": 58.5
+}

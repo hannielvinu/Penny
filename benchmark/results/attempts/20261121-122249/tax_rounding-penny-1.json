@@ -1,0 +1,119 @@
+{
+  "run": {
+    "id": "20261121-122249-77999b",
+    "version": "0.1.0",
+    "started_at": "2026-11-21T12:22:49.519248+00:00",
+    "finished_at": "2026-11-21T12:22:50.023271+00:00",
+    "status": "gateway_error",
+    "task": "Fix half-cent rounding in tax calculation; currency must round half up. Run all tests.",
+    "repo": "penny-benchmark-d6osij2d",
+    "base_commit": "0290d888e7f72e4351fd5fc80de889f96301e474",
+    "base_branch": "main",
+    "branch": "penny/fix-half-cent-rounding-in-tax-calcul-20261121-122249-77999b",
+    "allow_dirty": false,
+    "flags": {
+      "mock": false,
+      "private": false,
+      "tier": "auto"
+    },
+    "policy": {
+      "version": 1,
+      "confidential": false,
+      "confidential_globs": [
+        "secrets/**",
+        "**/*.pem",
+        ".env*",
+        "config/prod/**"
+      ],
+      "on_confidential": "go_local",
+      "de_escalate": true,
+      "test_command": null,
+      "auto_approve": {
+        "reads": true,
+        "commands": [
+          "pytest -q",
+          "python -m pytest -q"
+        ]
+      },
+      "limits": {
+        "budget_usd": 0.5,
+        "max_steps": 25,
+        "max_prompt_tokens": 6000,
+        "max_output_tokens": 800,
+        "max_wall_seconds": 900,
+        "token_cap": 150000
+      },
+      "models": {
+        "cheap": "groq/openai/gpt-oss-20b",
+        "strong": "groq/openai/gpt-oss-120b",
+        "local": "ollama/qwen2.5-coder:1.5b",
+        "local_strong": null,
+        "fallbacks": []
+      },
+      "git": {
+        "branch_prefix": "penny/",
+        "allow_push": false
+      }
+    },
+    "quote": {
+      "low": 8061,
+      "high": 44061,
+      "cost_low": 0.0008765249999999999,
+      "cost_high": 0.004791525,
+      "assumptions": "cold-start estimate, wide range; 6\u201314 steps; approx characters/4 tokens",
+      "files": 53
+    },
+    "steps": [],
+    "approvals": [
+      {
+        "kind": "quote",
+        "risk": "LOW",
+        "content": "{\n  \"low\": 8061,\n  \"high\": 44061,\n  \"cost_low\": 0.0008765249999999999,\n  \"cost_high\": 0.004791525,\n  \"assumptions\": \"cold-start estimate, wide range; 6\\u201314 steps; approx characters/4 tokens\",\n  \"files\": 53\n}",
+        "cost_usd": null,
+        "decision": true,
+        "timestamp": "2026-11-21T12:22:49.629841+00:00"
+      },
+      {
+        "kind": "git",
+        "risk": "MEDIUM",
+        "content": "git switch -c penny/fix-half-cent-rounding-in-tax-calcul-20261121-122249-77999b",
+        "cost_usd": null,
+        "decision": true,
+        "timestamp": "2026-11-21T12:22:49.630099+00:00"
+      }
+    ],
+    "budget_events": [],
+    "failover_events": [],
+    "withheld_files": [],
+    "files_changed": [],
+    "created_files": [],
+    "created_file_hashes": {},
+    "tests": [],
+    "totals": {
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "steps": 0,
+      "wall_ms": 466
+    },
+    "undo_command": "penny undo 20261121-122249-77999b",
+    "final_diff": "",
+    "error": "Gateway rejected request HTTP 400",
+    "summary": ""
+  },
+  "acceptance": {
+    "passed": false,
+    "violations": [],
+    "test": {
+      "command": [
+        "/home/user/penny/.venv/bin/python3",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 1,
+      "output": ".F..............................................                         [100%]\n=================================== FAILURES ===================================\n______________________________ test_tax_rounding _______________________________\n\n    def test_tax_rounding():\n>       assert calculate_tax(\"1.00\", \"0.005\") == Decimal(\"0.01\")\nE       AssertionError: assert Decimal('0.00') == Decimal('0.01')\nE        +  where Decimal('0.00') = calculate_tax('1.00', '0.005')\nE        +  and   Decimal('0.01') = Decimal('0.01')\n\ntests/test_shopkit.py:26: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_shopkit.py::test_tax_rounding - AssertionError: assert Deci...\n1 failed, 47 passed in 0.11s\n",
+      "wall_ms": 405
+    }
+  }
+}

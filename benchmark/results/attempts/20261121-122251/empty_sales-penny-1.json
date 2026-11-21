@@ -1,0 +1,119 @@
+{
+  "run": {
+    "id": "20261121-122251-f83c0e",
+    "version": "0.1.0",
+    "started_at": "2026-11-21T12:22:51.642411+00:00",
+    "finished_at": "2026-11-21T12:22:59.825255+00:00",
+    "status": "gateway_error",
+    "task": "Make average_sale return zero for an empty sales period and preserve nonempty averages. Run all tests.",
+    "repo": "penny-benchmark-akwz284x",
+    "base_commit": "65fbf9146ec917e08ddac40f18229f17306ef4f2",
+    "base_branch": "main",
+    "branch": "penny/make-average-sale-return-zero-for-an-20261121-122251-f83c0e",
+    "allow_dirty": false,
+    "flags": {
+      "mock": false,
+      "private": false,
+      "tier": "auto"
+    },
+    "policy": {
+      "version": 1,
+      "confidential": false,
+      "confidential_globs": [
+        "secrets/**",
+        "**/*.pem",
+        ".env*",
+        "config/prod/**"
+      ],
+      "on_confidential": "go_local",
+      "de_escalate": true,
+      "test_command": null,
+      "auto_approve": {
+        "reads": true,
+        "commands": [
+          "pytest -q",
+          "python -m pytest -q"
+        ]
+      },
+      "limits": {
+        "budget_usd": 0.5,
+        "max_steps": 25,
+        "max_prompt_tokens": 6000,
+        "max_output_tokens": 800,
+        "max_wall_seconds": 900,
+        "token_cap": 150000
+      },
+      "models": {
+        "cheap": "groq/openai/gpt-oss-20b",
+        "strong": "groq/openai/gpt-oss-120b",
+        "local": "ollama/qwen2.5-coder:1.5b",
+        "local_strong": null,
+        "fallbacks": []
+      },
+      "git": {
+        "branch_prefix": "penny/",
+        "allow_push": false
+      }
+    },
+    "quote": {
+      "low": 8074,
+      "high": 44074,
+      "cost_low": 0.0008779500000000001,
+      "cost_high": 0.00479295,
+      "assumptions": "cold-start estimate, wide range; 6\u201314 steps; approx characters/4 tokens",
+      "files": 53
+    },
+    "steps": [],
+    "approvals": [
+      {
+        "kind": "quote",
+        "risk": "LOW",
+        "content": "{\n  \"low\": 8074,\n  \"high\": 44074,\n  \"cost_low\": 0.0008779500000000001,\n  \"cost_high\": 0.00479295,\n  \"assumptions\": \"cold-start estimate, wide range; 6\\u201314 steps; approx characters/4 tokens\",\n  \"files\": 53\n}",
+        "cost_usd": null,
+        "decision": true,
+        "timestamp": "2026-11-21T12:22:51.718269+00:00"
+      },
+      {
+        "kind": "git",
+        "risk": "MEDIUM",
+        "content": "git switch -c penny/make-average-sale-return-zero-for-an-20261121-122251-f83c0e",
+        "cost_usd": null,
+        "decision": true,
+        "timestamp": "2026-11-21T12:22:51.718440+00:00"
+      }
+    ],
+    "budget_events": [],
+    "failover_events": [],
+    "withheld_files": [],
+    "files_changed": [],
+    "created_files": [],
+    "created_file_hashes": {},
+    "tests": [],
+    "totals": {
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "steps": 0,
+      "wall_ms": 8155
+    },
+    "undo_command": "penny undo 20261121-122251-f83c0e",
+    "final_diff": "",
+    "error": "Gateway rejected request HTTP 400",
+    "summary": ""
+  },
+  "acceptance": {
+    "passed": false,
+    "violations": [],
+    "test": {
+      "command": [
+        "/home/user/penny/.venv/bin/python3",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 1,
+      "output": "...F............................................                         [100%]\n=================================== FAILURES ===================================\n_______________________________ test_empty_sales _______________________________\n\n    def test_empty_sales():\n>       assert average_sale([]) == 0\n               ^^^^^^^^^^^^^^^^\n\ntests/test_shopkit.py:34: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nvalues = []\n\n    def average_sale(values: list[float]) -> float:\n        \"\"\"Empty sales periods have an average of zero.\"\"\"\n>       return sum(values) / len(values)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^\nE       ZeroDivisionError: division by zero\n\nshopkit/reports/sales.py:91: ZeroDivisionError\n=========================== short test summary info ============================\nFAILED tests/test_shopkit.py::test_empty_sales - ZeroDivisionError: division ...\n1 failed, 47 passed in 0.10s\n",
+      "wall_ms": 422
+    }
+  }
+}

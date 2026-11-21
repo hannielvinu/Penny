@@ -1,0 +1,205 @@
+{
+  "id": "20261121-123930",
+  "date": "2026-11-21T12:39:30.719179+00:00",
+  "commit": "ecbb14b94c8d945760a0264d7d5fa73670f5c1ac",
+  "n": 1,
+  "small_sample": true,
+  "models": {
+    "cheap": "groq/qwen/qwen3.8-27b",
+    "strong": "groq/qwen/qwen3.8-27b",
+    "local": "ollama/qwen2.5-coder:3b",
+    "local_strong": null,
+    "fallbacks": []
+  },
+  "registration": {
+    "benchmark/baseline_agent.py": "c75adbad1485959d5e41744175911fa137d81c6a845628563e1966a477d12dbf",
+    "benchmark/generate_sandbox.py": "0c1d33fffe6a7df9803a9b6f6e2a326b93277cbe10be8e087e21b693f1543fe2",
+    "benchmark/sandbox_template/.gitignore": "3e499e535d9bbbec2fcd748761ab7073d408329a2667084896736c5235eca36d",
+    "benchmark/sandbox_template/README.md": "89253dc35d4e7db19c99c3d9ef344a4149474863384ce1b4f556c095d9561fe9",
+    "benchmark/sandbox_template/pytest.ini": "b160d82f7811555051f8966d8e02750a985227c1d022208c784e606946f2eada",
+    "benchmark/sandbox_template/shopkit/__init__.py": "e684297ad54c0c48f336a992b6dee57bdc1b29fceee91f653f72184e0595cf66",
+    "benchmark/sandbox_template/shopkit/catalog/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "benchmark/sandbox_template/shopkit/catalog/categories.py": "f57770467e058c8b1aaa4d70503670be63bd84cf337b561a5fb39a36fdb6e696",
+    "benchmark/sandbox_template/shopkit/catalog/inventory.py": "670592dfb6d53a4912ebad78f84d8bc855c77db44ca5be63cdc7a48255d8ed52",
+    "benchmark/sandbox_template/shopkit/catalog/products.py": "6bcee5c7fb3bad548d8c37fdd2f42763c964de64c43255150e4fcc838afc26e7",
+    "benchmark/sandbox_template/shopkit/catalog/search.py": "1b034c5aae97c7a661da6a8d773a4bc60a3ce2d13d0cf265adcc375d905730a0",
+    "benchmark/sandbox_template/shopkit/catalog/variants.py": "e550f97fc1756f28b5f7d0360a51280eb1e87a0be822f8962ef670e15e10b54e",
+    "benchmark/sandbox_template/shopkit/orders/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "benchmark/sandbox_template/shopkit/orders/cart.py": "d1dac56923a3575a2df1e036e3bca3c383fc5ddafec92a63a1fc84ac75a7af5c",
+    "benchmark/sandbox_template/shopkit/orders/checkout.py": "507ee67f6f24a46678b6cd328ac0e3024d68768ca5e10fdf27b13468c68d2e7e",
+    "benchmark/sandbox_template/shopkit/orders/fulfillment.py": "adb24fe4da02703fb3554148566aa95789d73b3fb056c61f46662739ece5b686",
+    "benchmark/sandbox_template/shopkit/orders/payments.py": "a85b1fffc792ee91ad26a060112bbc4aea5c2e2c62df86017deca112a7b63635",
+    "benchmark/sandbox_template/shopkit/orders/returns.py": "7131b62426f3e565f55b0b473873cb69aeac038ec80c82d0cfc1710f064fd234",
+    "benchmark/sandbox_template/shopkit/pricing/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "benchmark/sandbox_template/shopkit/pricing/currency.py": "61691b2b2e3a084ba1cf3541d2ee4367a9aa80d56ee6f527f67ff29f4a6151f2",
+    "benchmark/sandbox_template/shopkit/pricing/discounts.py": "2fcf972778ba48c735dcd167cd6e242fe905c2f87e13c9a3f4142d3a482b9eb5",
+    "benchmark/sandbox_template/shopkit/pricing/promotions.py": "7eaa1adda79372b90243d4b632d37f2b07bfed0ed36f8d6a4f731e8e7cae2888",
+    "benchmark/sandbox_template/shopkit/pricing/quotes.py": "7d6cb01e832444702f29bb51f80af9cba79f0285e43061e11bb26db42d9ca150",
+    "benchmark/sandbox_template/shopkit/pricing/totals.py": "d6884fe9a3a879ca1d3e9b89d7ffb9f4b79b5c5068510f99f4f7b653a80095d0",
+    "benchmark/sandbox_template/shopkit/reports/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "benchmark/sandbox_template/shopkit/reports/customers.py": "cbe2328c78be5e90a93922498d48a1e899d205bf4d05ce72d43a1ecc06208a9f",
+    "benchmark/sandbox_template/shopkit/reports/daily.py": "b0e45923525dac73020df10bdda9e338de3867138a291e1cad85ec1f7de3a7ea",
+    "benchmark/sandbox_template/shopkit/reports/export.py": "2da36f28bf37bfe4915a4dad6b3e649e91f80e1177567f00e49087e335920d77",
+    "benchmark/sandbox_template/shopkit/reports/inventory.py": "71ced3cfd46d6538c7ec512035191691e72b0b30a2b2521c0daa438b1b5e1fdf",
+    "benchmark/sandbox_template/shopkit/reports/sales.py": "e4810537a5f40084f96e4e600039b751b2a789d85461eaa9417bbc954544c39b",
+    "benchmark/sandbox_template/shopkit/shipping/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "benchmark/sandbox_template/shopkit/shipping/labels.py": "3d09aac2acc5f163ee3fdf77e6245f939fac5907229954c4e8abb8e41402ce42",
+    "benchmark/sandbox_template/shopkit/shipping/parcels.py": "977f0334633778039a24227cbd7eaac6d8662dc686f6ed0cf9f63f093418b6df",
+    "benchmark/sandbox_template/shopkit/shipping/rates.py": "b21070c4d80463e2f1c58ee2c7e9e451935b3cf949aefaa91e7ec19e5872d963",
+    "benchmark/sandbox_template/shopkit/shipping/tracking.py": "2d5686c47e910f8acc43d2f574c36b1f3af72901470b6226091a07ee999cbc06",
+    "benchmark/sandbox_template/shopkit/shipping/zones.py": "fd80e191b69cdc55a5817b119bc1117544bc817150693108255c7e4343df8d18",
+    "benchmark/sandbox_template/shopkit/tax/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "benchmark/sandbox_template/shopkit/tax/calculator.py": "73963ffa2ab81996aac2d71d9a82297ecd9d630f858a448562c122649572bdce",
+    "benchmark/sandbox_template/shopkit/tax/exemptions.py": "6399e37f81565052222465b60eaaa62198af6a0d1885e27a7c2b01e37f7b5f4a",
+    "benchmark/sandbox_template/shopkit/tax/invoices.py": "19dff50cf47c523a703f8b4bffe6a05e0f1ac5fdc61a3b31f51553374b82079a",
+    "benchmark/sandbox_template/shopkit/tax/rates.py": "1444047336104c46fe4b8e150362e65fb508d87cca1a6f43505ffb0bbd349b15",
+    "benchmark/sandbox_template/shopkit/tax/regions.py": "483fb00b70803d65b5d6c468f499fd73ac16c573baa54c5b06c7f6e156df5f20",
+    "benchmark/sandbox_template/shopkit/users/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "benchmark/sandbox_template/shopkit/users/accounts.py": "4ccbdec136239174e458861d5d5abf9170b419e954495670b26da5319f219225",
+    "benchmark/sandbox_template/shopkit/users/addresses.py": "fe387408c04395abd8f08d4fe4d052e936bf31f7ae1efb688f2d60105960a1ef",
+    "benchmark/sandbox_template/shopkit/users/preferences.py": "920b9849d0caa146f1dd0f5ce973b96effb721fadc82b2edb715943a4f6595c4",
+    "benchmark/sandbox_template/shopkit/users/profiles.py": "170935ba5ed41ca505fbaefa3571555d6aaa450399b305a0458e67958d3884e6",
+    "benchmark/sandbox_template/shopkit/users/sessions.py": "96966bfb08b78be720f46d2db230e5ae49f44c783f1495ea00100c99b3c1bbab",
+    "benchmark/sandbox_template/shopkit/utils/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "benchmark/sandbox_template/shopkit/utils/cli.py": "648aa73e369d62deda969f93872d8fd799a4d223358c1533d584a9d396b12a47",
+    "benchmark/sandbox_template/shopkit/utils/collections.py": "f051079c3a0bff708833f4736e9e0b353f262e837e7556449f0f2c9e37dae4e3",
+    "benchmark/sandbox_template/shopkit/utils/dates.py": "60fc7ff80f76f0760351b7e475e9946bd6a19c3d393f458a936a03e10d834de0",
+    "benchmark/sandbox_template/shopkit/utils/pagination.py": "98595a2bf33b5508ed8b879cd004b23a80802ffe24e54d8f7166f1549161d934",
+    "benchmark/sandbox_template/shopkit/utils/validation.py": "9fe4d25d036fa3f6faa9da58c09297ad911583eb67484e61ed7dfe8079fca1aa",
+    "benchmark/sandbox_template/tests/test_shopkit.py": "8b1f7f3fcc6aecbef673491b8f41bac34823a3c0783927334261db44b683c8c3",
+    "benchmark/tasks.yaml": "3a38959d9e7f37926e14babac322aeda4e26263777eeb0084eaa8a7dff7c9953"
+  },
+  "runs": [
+    {
+      "task": "rename_discount",
+      "agent": "penny",
+      "repetition": 1,
+      "totals": {
+        "tokens_in": 9923,
+        "tokens_out": 124,
+        "cost_usd": null,
+        "steps": 3,
+        "wall_ms": 97404
+      },
+      "status": "gateway_error",
+      "acceptance": {
+        "passed": false,
+        "violations": [
+          "Acceptance test change differs from prescribed rename",
+          "Old discount_total name remains in shopkit/pricing/discounts.py",
+          "Old discount_total name remains in shopkit/pricing/quotes.py",
+          "Old discount_total name remains in shopkit/orders/checkout.py",
+          "Old discount_total name remains in shopkit/orders/cart.py",
+          "Old discount_total name remains in tests/test_shopkit.py"
+        ],
+        "test": {
+          "command": [
+            "/home/user/penny/.venv/bin/python3",
+            "-m",
+            "pytest",
+            "-q"
+          ],
+          "returncode": 2,
+          "output": "\n==================================== ERRORS ====================================\n____________________ ERROR collecting tests/test_shopkit.py ____________________\nImportError while importing test module '/tmp/penny-benchmark-u3gz7fku/tests/test_shopkit.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests/test_shopkit.py:8: in <module>\n    from shopkit.pricing.discounts import discounted_total as discount_total\nE   ImportError: cannot import name 'discounted_total' from 'shopkit.pricing.discounts' (/tmp/penny-benchmark-u3gz7fku/shopkit/pricing/discounts.py)\n=========================== short test summary info ============================\nERROR tests/test_shopkit.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.11s\n",
+          "wall_ms": 401
+        }
+      },
+      "raw": "20261121-123930/rename_discount-penny-1.json"
+    },
+    {
+      "task": "rename_discount",
+      "agent": "baseline",
+      "repetition": 1,
+      "totals": {
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "cost_usd": null,
+        "steps": 0,
+        "wall_ms": 40018
+      },
+      "status": "failed",
+      "acceptance": {
+        "passed": false,
+        "violations": [
+          "Acceptance test change differs from prescribed rename",
+          "Old discount_total name remains in shopkit/pricing/discounts.py",
+          "Old discount_total name remains in shopkit/pricing/quotes.py",
+          "Old discount_total name remains in shopkit/orders/checkout.py",
+          "Old discount_total name remains in shopkit/orders/cart.py",
+          "Old discount_total name remains in tests/test_shopkit.py"
+        ],
+        "test": {
+          "command": [
+            "/home/user/penny/.venv/bin/python3",
+            "-m",
+            "pytest",
+            "-q"
+          ],
+          "returncode": 2,
+          "output": "\n==================================== ERRORS ====================================\n____________________ ERROR collecting tests/test_shopkit.py ____________________\nImportError while importing test module '/tmp/penny-benchmark-mxk9ix_v/tests/test_shopkit.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/lib/python3.13/importlib/__init__.py:88: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests/test_shopkit.py:8: in <module>\n    from shopkit.pricing.discounts import discounted_total as discount_total\nE   ImportError: cannot import name 'discounted_total' from 'shopkit.pricing.discounts' (/tmp/penny-benchmark-mxk9ix_v/shopkit/pricing/discounts.py)\n=========================== short test summary info ============================\nERROR tests/test_shopkit.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.09s\n",
+          "wall_ms": 363
+        }
+      },
+      "raw": "20261121-123930/rename_discount-baseline-1.json"
+    }
+  ],
+  "summary": [
+    {
+      "task": "rename_discount",
+      "agent": "baseline",
+      "n": 1,
+      "passed": 0,
+      "tokens": 0,
+      "tokens_range": [
+        0,
+        0
+      ],
+      "cost_usd": null,
+      "cost_usd_range": null,
+      "steps": 0,
+      "steps_range": [
+        0,
+        0
+      ],
+      "wall_ms": 40018,
+      "wall_ms_range": [
+        40018,
+        40018
+      ]
+    },
+    {
+      "task": "rename_discount",
+      "agent": "penny",
+      "n": 1,
+      "passed": 0,
+      "tokens": 10047,
+      "tokens_range": [
+        10047,
+        10047
+      ],
+      "cost_usd": null,
+      "cost_usd_range": null,
+      "steps": 3,
+      "steps_range": [
+        3,
+        3
+      ],
+      "wall_ms": 97404,
+      "wall_ms_range": [
+        97404,
+        97404
+      ]
+    }
+  ],
+  "techniques": {
+    "repo_map": true,
+    "slice_reads": true,
+    "patch_edits": true,
+    "trim_tool_output": true,
+    "compaction": true,
+    "tiered_models": true,
+    "short_outputs": true,
+    "dedupe": true,
+    "stable_prefix": true
+  }
+}

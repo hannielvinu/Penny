@@ -1,0 +1,20 @@
+[
+ {
+  "tag": "PROVIDER OUTAGE",
+  "title": "Groq down, task still done",
+  "how": "Chaos proxy in front of Groq returns HTTP 503 for every request; Bifrost's fallback list names NVIDIA.",
+  "result": "Success in 5 steps (3.9 s): search, read, patch, run tests, finish. Every step answered by NVIDIA Nemotron; receipt records 5 verified failovers."
+ },
+ {
+  "tag": "SPENDING LIMIT",
+  "title": "Gateway stops the run",
+  "how": "Virtual key with a $0.001/day budget, already spent ($0.0011) by earlier calls on the same key. Penny's own cap set high on purpose.",
+  "result": "Bifrost refused the first call. Penny stopped with status budget_stopped, layer: gateway, after 0 tokens and 85 ms."
+ },
+ {
+  "tag": "CONFIDENTIAL CODE",
+  "title": "Never leaves the machine",
+  "how": "policy.confidential: true. The local-only key can reach Ollama and nothing else (the gateway refuses cloud models: penny doctor PASS).",
+  "result": "All 3 calls went to local qwen2.5-coder:3b, none to the cloud. The small CPU model repeated one patch, so Penny's loop guard stopped it: the task was not solved locally (needs a 7B+ model)."
+ }
+]

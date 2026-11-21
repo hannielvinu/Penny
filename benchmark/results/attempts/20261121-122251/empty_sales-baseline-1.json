@@ -1,0 +1,31 @@
+{
+  "run": {
+    "status": "failed",
+    "steps": [],
+    "errors": [
+      "Gateway rejected request HTTP 400"
+    ],
+    "totals": {
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "cost_usd": null,
+      "steps": 0,
+      "wall_ms": 393
+    }
+  },
+  "acceptance": {
+    "passed": false,
+    "violations": [],
+    "test": {
+      "command": [
+        "/home/user/penny/.venv/bin/python3",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 1,
+      "output": "...F............................................                         [100%]\n=================================== FAILURES ===================================\n_______________________________ test_empty_sales _______________________________\n\n    def test_empty_sales():\n>       assert average_sale([]) == 0\n               ^^^^^^^^^^^^^^^^\n\ntests/test_shopkit.py:34: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nvalues = []\n\n    def average_sale(values: list[float]) -> float:\n        \"\"\"Empty sales periods have an average of zero.\"\"\"\n>       return sum(values) / len(values)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^\nE       ZeroDivisionError: division by zero\n\nshopkit/reports/sales.py:91: ZeroDivisionError\n=========================== short test summary info ============================\nFAILED tests/test_shopkit.py::test_empty_sales - ZeroDivisionError: division ...\n1 failed, 47 passed in 0.10s\n",
+      "wall_ms": 447
+    }
+  }
+}

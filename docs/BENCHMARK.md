@@ -56,8 +56,15 @@ separately, document why and rerun both agents.
 
 <!-- RESULTS:START -->
 
-**Not yet run.** Real inference credentials and supported live models were not
-supplied. No comparative savings percentage is claimed.
+Real runs, 21 Nov 2026, `groq/qwen/qwen3.8-27b` for both agents through Bifrost, N=1 per task (small sample). Summary: `benchmark/SUMMARY.json`.
+
+| Task | Penny tokens | Baseline tokens | Penny steps | Baseline steps | Penny time | Baseline time | Tests pass (P / B) |
+|---|---|---|---|---|---|---|---|
+| pagination | **12,214** | 17,991 | **4** | 11 | 29.4 s | 144.1 s | ✅ / ✅ |
+| tax_rounding | **12,307** | 16,579 | **4** | 10 | 84.5 s | 131.3 s | ✅ / ✅ |
+| empty_sales | **12,408** | 13,016 | **4** | 10 | 85.2 s | 101.2 s | ✅ / ✅ |
+| ordered_unique | **15,972** | 13,385 | **5** | 10 | 133.3 s | 109.5 s | ✅ / ✅ |
+| rename_discount | **55,486** | 29,384 | **13** | 25 | 376.0 s | 247.0 s | ❌ / ❌ |
 
 <!-- RESULTS:END -->
 

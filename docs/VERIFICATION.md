@@ -1,5 +1,23 @@
 # Verification evidence
 
+## Live verification — 21 November 2026
+
+| Check | Result |
+|---|---|
+| Bifrost v2.4.0 with Groq (via chaos proxy), NVIDIA (custom OpenAI-type provider) and Ollama | Running; three virtual keys created by `scripts/bootstrap_bifrost.py` with `PENNY_CLOUD_PROVIDERS=groq,nvidia` |
+| `penny doctor --plain` | All PASS: gateway, keys, pricing with provenance, local model listed, local-key cloud request refused |
+| Benchmark (`penny bench --n 1 --task …`, 5 tasks) | Penny 4/5, baseline 4/5; on the 4 tasks both solved 52,901 vs 60,971 tokens, 17 vs 41 steps |
+| Outage (`scripts/live_scenarios.py failover`) | Groq → HTTP 503; all steps served by NVIDIA; task finished; 5 verified failover events |
+| Spending cap (`scripts/live_scenarios.py budget`) | $0.001/day key spent ($0.0011); gateway refused; run `budget_stopped`, layer gateway |
+| Confidential (`scripts/live_scenarios.py confidential`) | All calls to local `ollama/qwen2.5-coder:3b`; no cloud calls; small CPU model looped and was stopped (task not solved locally) |
+| `pytest` | 161 passed, 1 skipped |
+| `ruff check` | All checks passed |
+
+Bug found and fixed while running for real: Penny stripped `GIT_CONFIG_KEY_n` (contains "KEY") but kept `GIT_CONFIG_COUNT`, so git refused to start in environments that configure git through variables (regression test `tests/test_git_env.py`).
+
+## Earlier build checks — 8 November 2026 (before live credentials)
+
+
 Date: 2026-11-08. This file distinguishes executed checks from work needing external
 credentials. No real model output, price or comparative token result is fabricated.
 

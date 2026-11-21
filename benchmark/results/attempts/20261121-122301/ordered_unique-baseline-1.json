@@ -1,0 +1,41 @@
+{
+  "run": {
+    "status": "failed",
+    "steps": [
+      {
+        "number": 1,
+        "model": "groq/openai/gpt-oss-120b",
+        "tokens_in": 174,
+        "tokens_out": 377,
+        "tokens_source": "provider",
+        "cost_usd": 0.0002523,
+        "action": "write_file"
+      }
+    ],
+    "errors": [
+      "Gateway rejected request HTTP 400"
+    ],
+    "totals": {
+      "tokens_in": 174,
+      "tokens_out": 377,
+      "cost_usd": 0.0002523,
+      "steps": 1,
+      "wall_ms": 1522
+    }
+  },
+  "acceptance": {
+    "passed": false,
+    "violations": [],
+    "test": {
+      "command": [
+        "/home/user/penny/.venv/bin/python3",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "returncode": 1,
+      "output": ".............................................F..                         [100%]\n=================================== FAILURES ===================================\n____________________ test_domain_records[utils.collections] ____________________\n\nmodule = 'utils.collections'\n\n    @pytest.mark.parametrize(\"module\", MODULES)\n    def test_domain_records(module):\n        m = importlib.import_module(\"shopkit.\" + module)\n        rows = [{\"id\": \"one\", \"name\": \"First\", \"amount\": 2, \"active\": True}, {\"id\": \"two\", \"name\": \"Second\", \"amount\": 4, \"active\": False}]\n>       assert m.total_amount(rows) == 6\n               ^^^^^^^^^^^^^^\nE       AttributeError: module 'shopkit.utils.collections' has no attribute 'total_amount'\n\ntests/test_shopkit.py:59: AttributeError\n=========================== short test summary info ============================\nFAILED tests/test_shopkit.py::test_domain_records[utils.collections] - Attrib...\n1 failed, 47 passed in 0.09s\n",
+      "wall_ms": 402
+    }
+  }
+}
