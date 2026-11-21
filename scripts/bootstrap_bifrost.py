@@ -37,10 +37,16 @@ def bootstrap(base_url: str, headers: dict, client=None):
         data = response.json()
         existing = (data.get("virtual_keys") or []) if isinstance(data, dict) else (data or [])
         names = {v["name"] for v in existing}
+        # Cloud providers are configurable (e.g. PENNY_CLOUD_PROVIDERS=groq,nvidia).
+        cloud = [
+            p.strip()
+            for p in os.getenv("PENNY_CLOUD_PROVIDERS", "openai,anthropic").split(",")
+            if p.strip()
+        ]
         configs = [
-            ("penny-dev", ["openai", "anthropic"], 0.5, "BIFROST_VK_DEV"),
+            ("penny-dev", cloud, 0.5, "BIFROST_VK_DEV"),
             ("penny-local", ["ollama"], None, "BIFROST_VK_LOCAL"),
-            ("penny-demo-tiny", ["openai", "anthropic"], 0.001, "BIFROST_VK_DEMO_TINY"),
+            ("penny-demo-tiny", cloud, 0.001, "BIFROST_VK_DEMO_TINY"),
         ]
         for name, providers, budget, variable in configs:
             if name in names:

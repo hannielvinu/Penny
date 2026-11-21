@@ -1,0 +1,26 @@
+# Real free-tier setup used for the submitted benchmark (Groq primary, NVIDIA fallback, Ollama local).
+version: 1
+confidential: false
+confidential_globs: ["secrets/**", "**/*.pem", ".env*", "config/prod/**"]
+on_confidential: go_local
+de_escalate: true
+test_command: null
+auto_approve:
+  reads: true
+  commands: ["pytest -q", "python -m pytest -q"]
+limits:
+  budget_usd: 0.50
+  max_steps: 25
+  max_prompt_tokens: 6000      # stays under Groq's free-tier 8,000 tokens/minute
+  max_output_tokens: 800
+  max_wall_seconds: 900
+  token_cap: 150000
+models:
+  cheap: groq/qwen/qwen3.8-27b
+  strong: groq/qwen/qwen3.8-27b   # gpt-oss emits native tool calls that Groq rejects (tool_use_failed)
+  local: ollama/qwen2.5-coder:3b
+  local_strong: null
+  fallbacks: []   # benchmark: one provider, so both agents are measured on the same models
+git:
+  branch_prefix: penny/
+  allow_push: false

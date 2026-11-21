@@ -1,0 +1,12 @@
+# Copy to pricing.yaml. Prices from Groq's model pages (fetched 2026-11-21).
+models:
+  groq/openai/gpt-oss-120b:
+    input_per_1m_usd: 0.15
+    output_per_1m_usd: 0.60
+    source_url: https://console.groq.com/docs/model/openai/gpt-oss-120b
+    checked_on: "2026-11-21"
+  groq/openai/gpt-oss-20b:
+    input_per_1m_usd: 0.075
+    output_per_1m_usd: 0.30
+    source_url: https://console.groq.com/docs/model/openai/gpt-oss-20b
+    checked_on: "2026-11-21"

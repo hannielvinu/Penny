@@ -84,7 +84,7 @@ def test_errors(code, body, error):
     client = client_for(handler)
     with pytest.raises(error):
         client.complete([], Route("cloud", "test/model", "key", []), 100, [])
-    assert len(calls) == (3 if error == RateLimited else 1)
+    assert len(calls) == (6 if error == RateLimited else 1)
     client.close()
 
 

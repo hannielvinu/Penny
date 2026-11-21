@@ -1,4 +1,5 @@
 import json
+import os
 import time
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -71,8 +72,20 @@ class BifrostClient:
             temperature=0,
             fallbacks=route.fallbacks,
         )
+        if "gpt-oss" in route.model:
+            # Hidden reasoning tokens count against max_tokens; keep them small.
+            payload["reasoning_effort"] = "low"
+            # JSON mode stops gpt-oss emitting native tool calls ("tool_use_failed" on Groq);
+            # every Penny and baseline action is already a single JSON object.
+            payload["response_format"] = {"type": "json_object"}
+        elif route.model.startswith("ollama/"):
+            # Small local models need JSON mode to emit a single valid action object.
+            payload["response_format"] = {"type": "json_object"}
+        elif "qwen3" in route.model:
+            # Qwen3 thinks aloud by default; Penny's actions need the bare JSON object.
+            payload["reasoning_effort"] = "none"
         started = time.monotonic()
-        for attempt in range(1, 4):
+        for attempt in range(1, 7):
             if self.deadline is not None:
                 remaining = self.deadline - time.monotonic()
                 if remaining <= 0:
@@ -97,10 +110,11 @@ class BifrostClient:
                 ):
                     raise GatewayBudgetExceeded("Budget enforced by the gateway virtual key")
                 if response.status_code == 429:
-                    delay = retry_delay(response.headers.get("Retry-After", "1"))
+                    # Free tiers reset per minute; without a hint wait long enough to matter.
+                    delay = retry_delay(response.headers.get("Retry-After", "8"))
                     if self.deadline is not None and time.monotonic() + delay >= self.deadline:
                         raise Timeout("Retry would exceed run wall-clock cap")
-                    if attempt < 3 and delay <= 60:
+                    if attempt < 6 and delay <= 60:
                         self.sleep(delay)
                         continue
                     raise RateLimited("Gateway rate limit; retry later")
@@ -110,10 +124,17 @@ class BifrostClient:
                     raise AllProvidersFailed(
                         f"Gateway upstream failure HTTP {response.status_code}"
                     )
+                if os.getenv("PENNY_DEBUG_GATEWAY_ERRORS") == "1":
+                    # Opt-in local debugging only; bodies can echo prompt text.
+                    print(f"[penny debug] HTTP {response.status_code}: {response.text[:300]}")
                 raise BadRequest(f"Gateway rejected request HTTP {response.status_code}")
             try:
                 data = response.json()
                 content = data["choices"][0]["message"]["content"]
+                if content is None and data["choices"][0]["message"].get("reasoning_content"):
+                    # Reasoning models can spend the whole output budget thinking; treat the
+                    # empty answer as an invalid action step rather than a crashed run.
+                    content = ""
                 if not isinstance(content, str):
                     raise ValueError("Non-text completion")
                 usage = data.get("usage") or {}

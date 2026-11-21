@@ -19,7 +19,8 @@ def execute(root: Path, command: str | list[str], timeout: float = 120) -> dict:
     env = {
         k: v
         for k, v in os.environ.items()
-        if not any(s in k.upper() for s in ("KEY", "TOKEN", "SECRET", "PASSWORD", "BIFROST"))
+        if not k.upper().startswith("GIT_CONFIG_")
+        and not any(s in k.upper() for s in ("KEY", "TOKEN", "SECRET", "PASSWORD", "BIFROST"))
     }
     try:
         result = subprocess.run(

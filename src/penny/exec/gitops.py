@@ -26,7 +26,10 @@ def git(root: Path, *args: str, check: bool = True) -> str:
         env={
             k: v
             for k, v in os.environ.items()
-            if not any(
+            # GIT_CONFIG_COUNT/KEY_n/VALUE_n travel together: dropping only the keys
+            # (they contain "KEY") would leave a count git cannot parse.
+            if not k.upper().startswith("GIT_CONFIG_")
+            and not any(
                 s in k.upper()
                 for s in ("KEY", "TOKEN", "SECRET", "PASSWORD", "BIFROST", "GIT_EXTERNAL_DIFF")
             )

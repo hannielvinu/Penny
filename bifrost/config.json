@@ -4,17 +4,93 @@
     "disable_content_logging": true
   },
   "providers": {
+    "groq": {
+      "keys": [
+        {
+          "name": "groq-env",
+          "value": "env.GROQ_API_KEY",
+          "models": [
+            "*"
+          ],
+          "weight": 1.0
+        }
+      ],
+      "network_config": {
+        "base_url": "http://chaos:8099",
+        "default_request_timeout_in_seconds": 65,
+        "max_retries": 0
+      }
+    },
+    "nvidia": {
+      "keys": [
+        {
+          "name": "nvidia-env",
+          "value": "env.NVIDIA_API_KEY",
+          "models": [
+            "*"
+          ],
+          "weight": 1.0
+        }
+      ],
+      "network_config": {
+        "base_url": "https://integrate.api.nvidia.com",
+        "default_request_timeout_in_seconds": 90,
+        "max_retries": 0
+      },
+      "custom_provider_config": {
+        "base_provider_type": "openai"
+      }
+    },
     "openai": {
-      "keys": [{"name": "openai-env", "value": "env.OPENAI_API_KEY", "models": ["*"], "weight": 1.0}],
-      "network_config": {"base_url": "http://chaos:8099/v1", "default_request_timeout_in_seconds": 65, "max_retries": 1}
+      "keys": [
+        {
+          "name": "openai-env",
+          "value": "env.OPENAI_API_KEY",
+          "models": [
+            "*"
+          ],
+          "weight": 1.0
+        }
+      ],
+      "network_config": {
+        "default_request_timeout_in_seconds": 65,
+        "max_retries": 1
+      }
     },
     "anthropic": {
-      "keys": [{"name": "anthropic-env", "value": "env.ANTHROPIC_API_KEY", "models": ["*"], "weight": 1.0}],
-      "network_config": {"default_request_timeout_in_seconds": 60, "max_retries": 1}
+      "keys": [
+        {
+          "name": "anthropic-env",
+          "value": "env.ANTHROPIC_API_KEY",
+          "models": [
+            "*"
+          ],
+          "weight": 1.0
+        }
+      ],
+      "network_config": {
+        "default_request_timeout_in_seconds": 60,
+        "max_retries": 1
+      }
     },
     "ollama": {
-      "keys": [{"name": "local", "value": "ollama", "models": ["*"], "weight": 1.0, "ollama_key_config": {"url": "env.OLLAMA_BASE_URL"}}],
-      "network_config": {"default_request_timeout_in_seconds": 60, "max_retries": 0}
+      "keys": [
+        {
+          "name": "local",
+          "value": "ollama",
+          "models": [
+            "*"
+          ],
+          "weight": 1.0,
+          "ollama_key_config": {
+            "url": "env.OLLAMA_BASE_URL"
+          }
+        }
+      ],
+      "network_config": {
+        "default_request_timeout_in_seconds": 60,
+        "max_retries": 0
+      }
     }
   }
 }
