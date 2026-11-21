@@ -1,6 +1,6 @@
 """Combine real benchmark result files (benchmark/results/*.json) into one summary.
 
-Writes benchmark/results/SUMMARY.json and prints a Markdown table. Only files whose
+Writes benchmark/SUMMARY.json and prints a Markdown table. Only files whose
 runs used real gateway calls are present in benchmark/results/ (misconfigured attempts
 live in benchmark/results/attempts/ and are excluded on purpose, see README).
 """
@@ -72,7 +72,7 @@ def main():
         summary["step_reduction_pct"] = round(
             100 * (1 - summary["penny_steps_both"] / summary["baseline_steps_both"]), 1
         )
-    (ROOT / "benchmark/results/SUMMARY.json").write_text(json.dumps(summary, indent=2))
+    (ROOT / "benchmark/SUMMARY.json").write_text(json.dumps(summary, indent=2))
     print(
         "| Task | Penny tokens | Baseline tokens | Penny steps | Baseline steps | Penny time | Baseline time | Tests pass (P / B) |"
     )
