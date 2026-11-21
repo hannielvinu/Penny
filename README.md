@@ -242,6 +242,8 @@ Quotes are rough, prices can become stale, and in-flight requests can overshoot 
 
 ## Submission kit
 
+Demo video (76 s, real receipts from the benchmark, outage and budget runs): [`docs/demo/Penny_demo.mp4`](docs/demo/Penny_demo.mp4)
+
 Pitch deck: [PDF](deck/Penny_Pitch.pdf) · [PPTX](deck/Penny_Pitch.pptx) (all numbers generated from `benchmark/SUMMARY.json` and `docs/live/SCENARIOS.json`).
 
 
