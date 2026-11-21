@@ -1,1 +1,0 @@
-Penny quotes coding tasks, asks before changes, and gives an itemized receipt through the Bifrost gateway.

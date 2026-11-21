@@ -240,14 +240,7 @@ Python is first-class; other-language extraction is best-effort. Passing tests d
 
 Quotes are rough, prices can become stale, and in-flight requests can overshoot limits. Private routing does not isolate a compromised gateway, a network-capable local service, or approved shell programs. Undo refuses ambiguous state and cannot reverse external side effects. Local model quality varies. [Full limitations](docs/LIMITATIONS.md).
 
-## Submission kit
-
-Demo video (48 s, narrated, real receipts from the benchmark, outage and budget runs): [`docs/demo/Penny_demo.mp4`](docs/demo/Penny_demo.mp4)
-
-Pitch deck: [PDF](deck/Penny_Pitch.pdf) · [PPTX](deck/Penny_Pitch.pptx) (all numbers generated from `benchmark/SUMMARY.json` and `docs/live/SCENARIOS.json`).
-
-
-[Demo script](docs/DEMO_SCRIPT.md) · [Pitch and Q&A](docs/PITCH.md) · [Submission copy](docs/SUBMISSION.md) · [Progress](docs/PROGRESS.md) · [Verification](docs/VERIFICATION.md).
+## Stack and licence
 
 Stack: Python, Typer, Rich, Pydantic, pydantic-settings, httpx, PyYAML, pathspec, FastAPI, uvicorn, pytest, Ruff, mypy, Docker Compose, Bifrost, optional Ollama and Playwright. No provider SDK or frontend build.
 

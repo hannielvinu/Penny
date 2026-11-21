@@ -79,7 +79,6 @@ No other coding product was compared.
 | Isolated import from built wheel | PASS; defaults, prompts, CSS, fonts and HTML renderer available |
 | `python scripts/record_demo.py --mock --output .penny/demo` | SUCCESS; real patch and 48 passing sandbox tests; synthetic model usage |
 | `python scripts/screenshots.py .penny/demo/MOCK-receipt.html --mock` | PASS, 12 width/theme layouts plus 200% layout zoom |
-| `python scripts/count_chars.py docs/submission-one-liner.txt --limit 140` | PASS, 106 characters |
 | `docker compose config --quiet` and `docker compose up --build -d --wait` — WSL | PASS; Bifrost/chaos started and healthy |
 | `python scripts/bootstrap_bifrost.py` — WSL | Three keys created; rerun left all unchanged |
 | `penny doctor --plain` — WSL | Gateway/keys/isolation PASS; pricing and absent local model WARN |
