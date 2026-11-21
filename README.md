@@ -242,6 +242,9 @@ Quotes are rough, prices can become stale, and in-flight requests can overshoot 
 
 ## Submission kit
 
+Pitch deck: [PDF](deck/Penny_Pitch.pdf) · [PPTX](deck/Penny_Pitch.pptx) (all numbers generated from `benchmark/SUMMARY.json` and `docs/live/SCENARIOS.json`).
+
+
 [Demo script](docs/DEMO_SCRIPT.md) · [Pitch and Q&A](docs/PITCH.md) · [Submission copy](docs/SUBMISSION.md) · [Progress](docs/PROGRESS.md) · [Verification](docs/VERIFICATION.md).
 
 Stack: Python, Typer, Rich, Pydantic, pydantic-settings, httpx, PyYAML, pathspec, FastAPI, uvicorn, pytest, Ruff, mypy, Docker Compose, Bifrost, optional Ollama and Playwright. No provider SDK or frontend build.
